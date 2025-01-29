@@ -7,11 +7,12 @@ try {
 
     $connexion->exec("USE hotel_database;");
 
-    // Tables utilisateurs, entreprises, hotels, chambres
+    // Tables utilisateurs, entreprises, hotels, chambres,reservations
     $tableUtilisateurs = "CREATE TABLE IF NOT EXISTS utilisateurs (
         id INT AUTO_INCREMENT PRIMARY KEY,
         nom VARCHAR(255) NOT NULL,
         prenom VARCHAR(255) NOT NULL,
+        adresse TEXT NOT NULL,
         telephone VARCHAR(20),
         email VARCHAR(255) NOT NULL UNIQUE,
         mot_de_passe VARCHAR(255) NOT NULL
@@ -33,8 +34,8 @@ try {
         nom VARCHAR(255) NOT NULL,
         adresse TEXT NOT NULL,
         telephone VARCHAR(20),
-        description TEXT,
-        photo VARCHAR(255),
+        description_hotel TEXT,
+        photo_hotel VARCHAR(255),
         id_entreprise INT NOT NULL,
         FOREIGN KEY (id_entreprise) REFERENCES entreprises(id)
     );";
@@ -45,11 +46,24 @@ try {
         numero INT NOT NULL,
         prix FLOAT NOT NULL,
         nombre_lits INT NOT NULL,
+        description_chambre TEXT,
+        photo_chambre VARCHAR(255),
         etat ENUM('libre', 'reserve') NOT NULL DEFAULT 'libre',
         id_hotel INT NOT NULL,
         FOREIGN KEY (id_hotel) REFERENCES hotels(id)
     );";
     $connexion->exec($tableChambres);
+
+    $tableReservations = "CREATE TABLE IF NOT EXISTS reservations (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        date_debut DATE NOT NULL,
+        date_fin DATE NOT NULL,
+        id_utilisateur INT NOT NULL,
+        id_chambre INT NOT NULL,
+        FOREIGN KEY (id_utilisateur) REFERENCES utilisateurs(id),
+        FOREIGN KEY (id_chambre) REFERENCES chambres(id)
+    );";
+    $connexion->exec($tableReservations);
 
     echo "Base de données et tables créées avec succès.";
 } catch (PDOException $exception) {

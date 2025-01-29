@@ -1,0 +1,41 @@
+changement darchitectur du projet ajou de fichier et chanjement de non
+
+projet_hotel
+
+|__config/
+|   |__configuration.php
+|   |__creation.php
+|__controllers/
+|   |__EntrepriseController.php
+|   |__HotelController.php
+|   |__UtilisateurController.php
+|__css/
+|   |__style.css
+|__images/
+|__log/
+|__models/
+|   |__Chambre.php
+|   |__Entreprise.php
+|   |__Hotel.php
+|   |__Reservation.php
+|   |__Utilisateur.php
+|__views/
+|   |__entreprise/
+|   |   |__formulaire_ajouter_chambre.php
+|   |   |__formulaire_ajouter_hotel.php
+|   |   |__formulaire_connexion_entr.php
+|   |   |__formulaire_inscription_entr.php
+|   |__holel/
+|   |   |__liste_hotels.php
+|   |__utilisateur/
+|   |   |__formulaire_connexion_util.php
+|   |   |__formulaire_inscription_util.php
+|   |   |__formulaire_reservation.php
+|   |__footer.php
+|   |__footer.php
+|__index.php
+
+jai besoit de tont aide pour cree tout le vue
+
+un header commun a tout toute les vues. 
+Le header permet d’appliquer un style CSS a toutes les vues, les menus de navigation, et l’Etat des différentes sessions.
