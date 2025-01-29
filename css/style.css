@@ -1,0 +1,48 @@
+/* css/style.css */
+body {
+  font-family: Arial, sans-serif;
+}
+header {
+  width: 100%;
+  background-color: #f8f9fa;
+}
+nav {
+  width: 80%;
+  margin: auto;
+  border: 2px solid yellow;
+}
+main {
+  width: 80%;
+  margin: auto;
+}
+footer {
+  width: 100%;
+  background-color: #f8f9fa;
+}
+h1,
+h2,
+h3 {
+  color: white;
+}
+nav a {
+  color: darkblue;
+  text-decoration: none;
+}
+nav a:hover {
+  color: lightblue;
+}
+form {
+  background-color: #d3d3d3;
+  padding: 20px;
+  border-radius: 5px;
+}
+.grille-hotels {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+}
+.vignette-hotel {
+  border: 1px solid #ccc;
+  padding: 10px;
+  background-color: #f9f9f9;
+}
