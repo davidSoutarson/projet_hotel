@@ -1,10 +1,9 @@
 <?php
-require_once 'config/config.php';
+require_once __DIR__ . '/../config/configuration.php';
 
 class Utilisateur
 {
     private $connexion;
-    private $table = "utilisateurs";
 
     public function __construct()
     {
@@ -14,8 +13,18 @@ class Utilisateur
 
     public function ajouterUtilisateur($nom, $prenom, $telephone, $email, $motDePasse)
     {
-        $requete = "INSERT INTO " . $this->table . " (nom, prenom, telephone, email, mot_de_passe) VALUES (?, ?, ?, ?, ?)";
+        $requete = "INSERT INTO utilisateurs (nom, prenom, telephone, email, mot_de_passe)
+                    VALUES (:nom, :prenom, :telephone, :email, :mot_de_passe)";
         $stmt = $this->connexion->prepare($requete);
-        return $stmt->execute([$nom, $prenom, $telephone, $email, $motDePasse]);
+        $stmt->bindParam(':nom', $nom);
+        $stmt->bindParam(':prenom', $prenom);
+        $stmt->bindParam(':telephone', $telephone);
+        $stmt->bindParam(':email', $email);
+        $stmt->bindParam(':mot_de_passe', $motDePasse);
+
+        return $stmt->execute();
     }
 }
+
+
+echo '<p>je suis le fichier models/Utilisateur.php</p>';

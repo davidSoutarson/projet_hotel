@@ -1,5 +1,5 @@
 <?php
-require_once 'config/config.php';
+require_once 'config/configuration.php';
 
 class Hotel
 {
@@ -20,3 +20,5 @@ class Hotel
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }
+
+echo '<p>je suis le fichier Utilisateur.php</p>';

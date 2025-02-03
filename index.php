@@ -1,5 +1,6 @@
 <?php
 require_once 'config/configuration.php';
+require_once 'config/creation_database.php';
 require_once 'views/header.php';
 require_once 'controllers/HotelController.php';
 //index.php ne fonction pas comme prévue! a resoudre  
