@@ -20,6 +20,8 @@ class Database
     }
 }
 
+/* definition des chemin pour l'enseble du proget */
+
 define('BASE_PATH', realpath(dirname(__DIR__)) . DIRECTORY_SEPARATOR);
 define('MODEL_PATH', BASE_PATH . 'models' . DIRECTORY_SEPARATOR);
 define('CONTROLLER_PATH', BASE_PATH . 'controllers' . DIRECTORY_SEPARATOR);

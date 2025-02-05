@@ -8,6 +8,9 @@
     <label for="prenom">Prénom :</label>
     <input type="text" id="prenom" name="prenom" required><br>
 
+    <label for="adresse">Adresse :</label>
+    <input type="text" id="adresse" name="adresse" required><br>
+
     <label for="telephone">Téléphone :</label>
     <input type="text" id="telephone" name="telephone"><br>
 

@@ -11,18 +11,24 @@ class Utilisateur
         $this->connexion = $database->obtenirConnexion();
     }
 
-    public function ajouterUtilisateur($nom, $prenom, $telephone, $email, $motDePasse)
+    public function ajouterUtilisateur($nom, $prenom, $adresse, $telephone, $email, $motDePasse)
     {
-        $requete = "INSERT INTO utilisateurs (nom, prenom, telephone, email, mot_de_passe)
-                    VALUES (:nom, :prenom, :telephone, :email, :mot_de_passe)";
+        $requete = "INSERT INTO utilisateurs (nom, prenom, adresse, telephone, email, mot_de_passe)
+                    VALUES (:nom, :prenom, :adresse, :telephone, :email, :mot_de_passe)";
         $stmt = $this->connexion->prepare($requete);
         $stmt->bindParam(':nom', $nom);
         $stmt->bindParam(':prenom', $prenom);
+        $stmt->bindParam(':adresse', $adresse);
         $stmt->bindParam(':telephone', $telephone);
         $stmt->bindParam(':email', $email);
         $stmt->bindParam(':mot_de_passe', $motDePasse);
 
         return $stmt->execute();
+    }
+
+    public function recupererDernierId()
+    {
+        return $this->connexion->lastInsertId();
     }
 }
 
