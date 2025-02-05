@@ -2,7 +2,7 @@
 
 <h2>Inscription Entreprise</h2>
 <form action="../../controllers/EntrepriseController.php" method="POST">
-    <label for="nom">Nom :</label>
+    <label for="nom">Nom de l'entreprise :</label>
     <input type="text" id="nom" name="nom" required><br>
 
     <label for="adresse">Adresse :</label>

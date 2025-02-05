@@ -62,7 +62,7 @@ class UtilisateurController
                 header('Location: ../views/utilisateur/formulaire_connexion_util.php');
                 exit();
             } else {
-                echo "Erreur lors de l'inscription.";
+                echo "Erreur lors de l'inscription utilisateur.";
             }
         } else {
             echo "Tous les champs obligatoires doivent être renseignés.";
