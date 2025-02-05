@@ -4,7 +4,8 @@
 
 <p>Description pour le devoir ce fichier permet de vérifier si l'utilisateur possède un conte</p>
 
-<form action="../../controllers/UtilisateurController.php" method="POST">
+<form action="../../controllers/connexionUtilControleur.php" method="POST">
+
     <label for="email">Email :</label>
     <input type="email" id="email" name="email" required><br>
 

@@ -3,15 +3,20 @@ class SessionUtilController
 {
     /**
      * Crée une session pour l'utilisateur avec les informations fournies.
-     *
+     * par : formulaire_inscription_util.php
      * @param int $idUtilisateur L'identifiant de l'utilisateur
      * @param string $nom Le nom de l'utilisateur
      * @param string $prenom Le prénom de l'utilisateur
      * @param string $adresse L'adresse de l'utilisateur
      * @param string $email L'email de l'utilisateur
      */
-    public static function creerSessionUtilisateur($idUtilisateur, $nom, $prenom, $adresse, $email)
-    {
+    public static function creerSessionUtilisateur(
+        $idUtilisateur,
+        $nom,
+        $prenom,
+        $adresse,
+        $email
+    ) {
         // Démarre la session si ce n'est pas encore fait
         if (session_status() !== PHP_SESSION_ACTIVE) {
             session_start();
@@ -19,39 +24,43 @@ class SessionUtilController
 
         // Stocke les informations utilisateur dans la session
         $_SESSION['utilisateur'] = [
-            'id' => $idUtilisateur,
-            'nom' => $nom,
-            'prenom' => $prenom,
+            'id'      => $idUtilisateur,
+            'nom'     => $nom,
+            'prenom'  => $prenom,
             'adresse' => $adresse,
-            'email' => $email
+            'email'   => $email
         ];
     }
 
     /**
-     * Détruit la session utilisateur en cours et supprime le cookie de session.
+     * Détruit la session utilisateur en cours ou supprime uniquement la variable 'utilisateur'.
      */
     public static function detruireSession()
     {
-        if (session_status() === PHP_SESSION_ACTIVE) {
-            // Supprime toutes les variables de session
-            session_unset();
+        // Démarre la session si ce n'est pas encore fait
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            session_start();
+        }
 
-            // Détruit la session en cours
-            session_destroy();
+        // Supprime uniquement la variable 'utilisateur'
+        unset($_SESSION['utilisateur']);
 
-            // Supprime également le cookie de session si présent
-            if (ini_get("session.use_cookies")) {
-                $params = session_get_cookie_params();
-                setcookie(
-                    session_name(), // Nom du cookie
-                    '', // Valeur vide pour suppression
-                    time() - 42000, // Expiration passée
-                    $params["path"],
-                    $params["domain"],
-                    $params["secure"],
-                    $params["httponly"]
-                );
-            }
+        // Pour détruire complètement la session, décommenter les lignes suivantes :
+        // session_unset();
+        // session_destroy();
+
+        // Supprime également le cookie de session si présent
+        if (ini_get("session.use_cookies")) {
+            $params = session_get_cookie_params();
+            setcookie(
+                session_name(), // Nom du cookie
+                '',             // Valeur vide pour suppression
+                time() - 42000, // Expiration passée
+                $params["path"],
+                $params["domain"],
+                $params["secure"],
+                $params["httponly"]
+            );
         }
     }
 
@@ -81,10 +90,10 @@ class SessionUtilController
 
 // Gestion de l'action "deconnexion"
 if (isset($_GET['action']) && $_GET['action'] === 'deconnexion') {
-    // Appelle la méthode pour détruire la session
+    // Démarre la session et supprime la variable 'utilisateur'
     SessionUtilController::detruireSession();
 
-    // Redirection après déconnexion
-    header('Location: ../index.php'); // Page de redirection après la déconnexion
+    // Redirection après déconnexion vers la page d'accueil
+    header('Location: ../index.php');
     exit();
 }

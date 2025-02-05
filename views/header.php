@@ -4,16 +4,17 @@ session_start(); // Démarre la session si ce n'est pas déjà fait
 <header>
     <h1>Bienvenue sur notre site de réservation d'hôtels</h1>
     <nav>
+        <p>menu consernent les ulilisateurs</p>
         <ul class="menu">
-            <p>menu consernent les ulilisateurs</p>
             <li><a href="/index.php">Accueil</a></li>
             <li><a href="/views/utilisateur/formulaire_inscription_util.php">Inscription Utilisateur</a></li>
             <li><a href="/views/utilisateur/formulaire_connexion_util.php">Connexion Utilisateur</a></li>
             <li><a href="/views/utilisateur/formulaire_reservation.php">Reservation</a></li>
 
         </ul>
+
+        <p>menu consernent les entreprise</p>
         <ul>
-            <p>menu consernent les entreprise</p>
             <li><a href="/views/entreprise/formulaire_inscription_entr.php">Inscription Entreprise</a></li>
             <li><a href="/views/entreprise/formulaire_connexion_entr.php">Connexion Entreprise</a></li>
             <li><a href="/views/entreprise/formulaire_ajouter_hotel.php">Ajouter des hotel</a></li>
@@ -21,16 +22,28 @@ session_start(); // Démarre la session si ce n'est pas déjà fait
         </ul>
     </nav>
     <div>
-        <h2> info etat conextion </h2>
+        <h2> Etat de la connexion </h2>
+        <?php
 
-        <?php if (isset($_SESSION['utilisateur'])): ?>
-            <p>Compte Utilisateur : <?= htmlspecialchars($_SESSION['utilisateur']['prenom']) . ' ' . htmlspecialchars($_SESSION['utilisateur']['nom']); ?></p>
-            <a href="/controllers/SessionUtilController.php?action=deconnexion" class="btn-deconnexion">Se déconnecter</a>
+        if (isset($_SESSION['utilisateur'])) {
+            echo '<p>Compte Utilisateur : ' . htmlspecialchars($_SESSION['utilisateur']['prenom'], ENT_QUOTES, 'UTF-8')
+                . ' ' . htmlspecialchars($_SESSION['utilisateur']['nom'], ENT_QUOTES, 'UTF-8') . '</p>';
+            echo '<button><a href="/controllers/SessionUtilController.php?action=deconnexion"> déconnexion utilisateur </a></button>';
+        } elseif (isset($_SESSION['entreprise'])) {
+            echo '<p>Compte Entreprise : ' . htmlspecialchars($_SESSION['entreprise']['nom'], ENT_QUOTES, 'UTF-8')
+                . ' ' . htmlspecialchars($_SESSION['entreprise']['nom'], ENT_QUOTES, 'UTF-8') . '</p>';
+            echo '<button><a href="/controllers/SessionEntrController.php?action=deconnexion"> déconnexion entreprise</a></button>';
+        } else {
+            // Aucun compte n'est connecté
+            echo '<p>Vous n\'êtes pas connecté.</p>';
+        }
 
-        <?php elseif (isset($_SESSION['entreprise'])): ?>
-            <p>Compte Entreprise : <?= htmlspecialchars($_SESSION['entreprise']['nom']) . ' ' . htmlspecialchars($_SESSION['entreprise']['nom']); ?></p>
-            <button><a href="/controllers/SessionEntrController.php?action=deconnexion">Se déconnecter entreprise</a></button>
-        <?php endif; ?>
+
+        if (isset($_SESSION['success'])) {
+            echo '<div class="alert alert-success">' . htmlspecialchars($_SESSION['success'], ENT_QUOTES, 'UTF-8') . '</div>';
+            unset($_SESSION['success']);
+        }
+        ?>
     </div>
 
 </header>

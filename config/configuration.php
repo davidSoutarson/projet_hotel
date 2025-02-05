@@ -26,4 +26,7 @@ define('BASE_PATH', realpath(dirname(__DIR__)) . DIRECTORY_SEPARATOR);
 define('MODEL_PATH', BASE_PATH . 'models' . DIRECTORY_SEPARATOR);
 define('CONTROLLER_PATH', BASE_PATH . 'controllers' . DIRECTORY_SEPARATOR);
 
+define('VIEWS_PATH', BASE_PATH . 'views' . DIRECTORY_SEPARATOR);
+define('UTLISATEUR_PATH', VIEWS_PATH . 'fomulaire_incription' . DIRECTORY_SEPARATOR);
+
 echo '<p>je suis le fichier config/configurartion.php</p>';

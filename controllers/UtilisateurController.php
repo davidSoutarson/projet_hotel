@@ -75,19 +75,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $utilisateurController = new UtilisateurController();
     $utilisateurController->inscrireUtilisateur();
 }
-
-
-// verifier la creation de table utilisateur base de donne
-
-// 2/5. Améliorations possibles
-# Ses fait: Redirection après l'inscription : Au lieu de simplement afficher un message, vous pouvez rediriger vers une page de confirmation.
-
-# Ses fait: Ajouter une création de session utilisateur gérer par un fichier indépendant
-
-# Amélioration Sécurité :
-#  renforcer encore la sécurité, ajoute une validation des champs et des messages d'erreur plus détaillés.
-
-# Validation de l'email et sécurité : Ajoutez des vérifications supplémentaires pour l'email et des contraintes pour les mots de passe.
-
-# Gestion des Erreurs :
-# remplacer les echo par un mécanisme de gestion des erreurs utilisateur
