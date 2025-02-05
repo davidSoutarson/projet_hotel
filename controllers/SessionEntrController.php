@@ -91,7 +91,7 @@ class SessionEntrController
 // Gestion de l'action "deconnexion"
 if (isset($_GET['action']) && $_GET['action'] === 'deconnexion') {
     // Démarre la session et supprime la variable 'utilisateur'
-    SessionUtilController::detruireSession();
+    SessionEntrController::detruireSession();
 
     // Redirection après déconnexion vers la page d'accueil
     header('Location: ../index.php');
