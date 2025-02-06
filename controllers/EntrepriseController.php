@@ -7,6 +7,7 @@ require_once CONTROLLER_PATH . 'SessionEntrController.php';
  */
 class EntrepriseController
 {
+
     private $entrepriseModel;
 
     /**

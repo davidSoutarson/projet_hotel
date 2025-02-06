@@ -2,12 +2,21 @@
 require_once __DIR__ . '/../config/configuration.php';
 require_once MODEL_PATH . 'Utilisateur.php';
 require_once CONTROLLER_PATH . 'SessionUtilController.php';
-
 /**
  * Contrôleur pour la gestion des utilisateurs.
  */
 class UtilisateurController
 {
+    /**
+     * Contrôleur pour les utilisateurs.
+     * par : formulaire_inscription_entr.php
+     * @param string $inscription_util_nom
+     * @param string $inscription_util_prenom
+     * @param string $inscription_util_adresse
+     * @param string $instruction_util_telephone
+     * @param string $instruction_util_email
+     * @param string $inscription_util_mot_de_passe
+     */
     private $utilisateurModel;
 
     /**
