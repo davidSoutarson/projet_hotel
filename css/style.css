@@ -4,33 +4,49 @@ body {
 }
 header {
   width: 100%;
-  background-color: #f8f9fa;
+  background-color: #1f85ec;
 }
 nav {
   width: 80%;
   margin: auto;
   border: 2px solid yellow;
 }
+nav ul {
+  display: flex;
+}
+
+li {
+  list-style-type: none;
+  margin: 5px;
+  border: solid 2px white;
+}
+nav a {
+  color: darkblue;
+  text-decoration: none;
+  margin: 5px;
+}
+nav a:hover {
+  color: lightblue;
+  background-color: blue;
+}
+
 main {
   width: 80%;
   margin: auto;
 }
 footer {
   width: 100%;
-  background-color: #f8f9fa;
+  background-color: #69abee;
 }
-h1,
-h2,
-h3 {
+h1 {
   color: white;
 }
-nav a {
-  color: darkblue;
-  text-decoration: none;
+
+h2,
+h3 {
+  color: blue;
 }
-nav a:hover {
-  color: lightblue;
-}
+
 form {
   background-color: #d3d3d3;
   padding: 20px;

@@ -1,6 +1,18 @@
 <?php
 session_start(); // Démarre la session si ce n'est pas déjà fait
+require_once __DIR__ . '/../config/configuration.php';
 ?>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href=" /<?php echo str_replace(BASE_PATH, '', CSS_PATH) . 'style.css';  ?>">
+
+    <title>Mon Site Hôtel</title>
+</head>
+
 <header>
     <h1>Bienvenue sur notre site de réservation d'hôtels</h1>
     <nav>

@@ -64,8 +64,6 @@ try {
         FOREIGN KEY (id_chambre) REFERENCES chambres(id)
     );";
     $connexion->exec($tableReservations);
-
-    echo "Base de données et tables créées avec succès.";
 } catch (PDOException $exception) {
     echo "Erreur lors de la création de la base de données : " . $exception->getMessage();
 }

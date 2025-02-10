@@ -31,6 +31,3 @@ class Utilisateur
         return $this->connexion->lastInsertId();
     }
 }
-
-
-echo '<p>je suis le fichier models/Utilisateur.php</p>';
