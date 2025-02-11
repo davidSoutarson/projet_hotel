@@ -22,10 +22,19 @@ class Database
 
 /* definition des chemin pour l'enseble du proget */
 
+
+define('BASE_URL', 'http://localhost/projet_hotel/');
+
 define('BASE_PATH', realpath(dirname(__DIR__)) . DIRECTORY_SEPARATOR);
-define('CSS_PATH', BASE_PATH . 'css' . DIRECTORY_SEPARATOR);
+
+
+// Définir le chemin vers le répertoire CSS
+define('CSS_PATH', BASE_URL . 'css/');
+
 define('MODEL_PATH', BASE_PATH . 'models' . DIRECTORY_SEPARATOR);
 define('CONTROLLER_PATH', BASE_PATH . 'controllers' . DIRECTORY_SEPARATOR);
-
 define('VIEWS_PATH', BASE_PATH . 'views' . DIRECTORY_SEPARATOR);
-define('UTLISATEUR_PATH', VIEWS_PATH . 'fomulaire_incription' . DIRECTORY_SEPARATOR);
+
+//define('UTLISATEUR_PATH', VIEWS_PATH . 'fomulaire_incription' . DIRECTORY_SEPARATOR);
+
+$configTeste = "appel du fichier config/configuration.php 01 OK";

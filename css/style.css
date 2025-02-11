@@ -62,3 +62,9 @@ form {
   padding: 10px;
   background-color: #f9f9f9;
 }
+
+.test {
+  border: 1px solid red;
+  width: 70%;
+  margin: auto;
+}

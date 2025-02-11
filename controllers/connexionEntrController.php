@@ -1,7 +1,7 @@
 <?php
 // Inclusion du fichier de configuration et du contrôleur de session entreprise
 require_once '../config/configuration.php';
-require_once 'SessionUtilController.php';
+require_once 'SessionEntrController.php';
 
 /**
  * Nettoie une chaîne de caractères en supprimant les balises HTML et en échappant les caractères spéciaux.
@@ -34,56 +34,53 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $connexion = $database->obtenirConnexion();
 
             // Préparation de la requête pour chercher l'entreprise par email dans la table 'entreprises'
-            $requete = $connexion->prepare('SELECT * FROM utilisateurs WHERE email = :email');
+            $requete = $connexion->prepare('SELECT * FROM entreprises WHERE email = :email');
             $requete->bindParam(':email', $email);
             $requete->execute();
 
-            $utilisateur = $requete->fetch(PDO::FETCH_ASSOC);
+            $entreprise = $requete->fetch(PDO::FETCH_ASSOC);
 
             // Vérifie si l'entreprise existe et si le mot de passe correspond (en comparant le hash)
-            if ($utilisateur && password_verify($motDePasse, $utilisateur['mot_de_passe'])) {
+            if ($entreprise && password_verify($motDePasse, $entreprise['mot_de_passe'])) {
                 // Création de la session entreprise via le contrôleur de session dédié
-                SessionUtilController::creerSessionUtilisateur(
-                    $utilisateur['id'],
-                    $utilisateur['nom'],
-                    $utilisateur['prenom'],
-                    $utilisateur['adresse'],
-                    $utilisateur['email']
+                SessionEntrController::creerSessionEntreprise(
+                    $entreprise['id'],
+                    $entreprise['nom'],
+                    $entreprise['adresse'],
+                    $entreprise['email']
                 );
-                $_SESSION['success'] = "Connexion utilisateur  réussie.";
+                $_SESSION['success'] = "Connexion entreprise réussie.";
                 // Redirection vers la page d'accueil. Utilisez BASE_URL si elle est définie.
-                $teste22 = "Sa marche";
                 header('Location: ../index.php');
-
                 exit();
             } else {
                 // Si les informations sont incorrectes, détruire toute session existante
-                SessionUtilController::detruireSession();
+                SessionEntrController::detruireSession();
                 // Redirection vers le formulaire de connexion entreprise avec un message d'erreur
-                header('Location: ../views/utilisateur/formulaire_connexion_util.php?erreur=1');
+                header('Location: ../views/entreprise/formulaire_connexion_entr.php?erreur=1');
                 exit();
             }
         } catch (PDOException $e) {
             // Gérer les erreurs de connexion à la base de données
             error_log('Erreur de connexion à la base de données : ' . $e->getMessage());
-            header('Location: ../views/utilisateur/formulaire_connexion_util.php?erreur=2');
+            header('Location: ../views/entreprise/formulaire_connexion_entr.php?erreur=2');
             exit();
         }
     } else {
-        // Données du formulaire invalides
-        header('Location: ../views/utilisateur/formulaire_connexion_util.php?erreur=3');
+        // Si les champs requis ne sont pas remplis, rediriger avec un message d'erreur
+        header('Location: ../views/entreprise/formulaire_connexion_entr.php?erreur=3');
         exit();
     }
 } else {
-    // Si la requête n'est pas de type POST, rediriger vers le formulaire de connexion
-    header('Location: ../views/utilisateur/formulaire_connexion_util.php');
+    // Si la requête n'est pas de type POST, rediriger vers le formulaire de connexion entreprise
+    header('Location: ../views/entreprise/formulaire_connexion_entr.php');
     exit();
 }
 
-// Gestion de l'action "deconnexion"
+// Gestion de l'action "deconnexion" pour les entreprises
 if (isset($_GET['action']) && $_GET['action'] === 'deconnexion') {
     // Appelle la méthode pour détruire la session
-    SessionUtilController::detruireSession();
+    SessionEntrController::detruireSession();
 
     // Redirection après déconnexion
     header('Location: ../index.php'); // Page de redirection après la déconnexion

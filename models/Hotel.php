@@ -19,6 +19,22 @@ class Hotel
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-}
 
-echo '<p>je suis le fichier Utilisateur.php</p>';
+    public function ajouterHotel($nomHotel, $adresseHotel, $telephoneHotel, $descriptionHotel, $photoHotel, $id_entreprise)
+    {
+        $requete = "INSERT INTO " . $this->table . " (nom, adresse, telephone, description, photo, id_entreprise) 
+                VALUES (:nom, :adresse, :telephone, :description, :photo, :id_entreprise)";
+        $stmt = $this->connexion->prepare($requete);
+        $stmt->bindParam(':nom', $nomHotel);
+        $stmt->bindParam(':adresse', $adresseHotel);
+        $stmt->bindParam(':telephone', $telephoneHotel);
+        $stmt->bindParam(':description', $descriptionHotel);
+        $stmt->bindParam(':photo', $photoHotel);
+        $stmt->bindParam(':id_entreprise', $id_entreprise);
+        $stmt->execute();
+    }
+    public function recupererDernierId()
+    {
+        return $this->connexion->lastInsertId();
+    }
+}

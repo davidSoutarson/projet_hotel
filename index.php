@@ -3,10 +3,8 @@ require_once 'config/configuration.php';
 require_once 'config/creation_database.php';
 require_once 'views/header.php';
 require_once 'controllers/HotelController.php';
-//index.php ne fonction pas comme prévue! a resoudre  
-# panset a lencer lecriutre de de la base de donnner 
-# il faut ajouter le css au projet
-echo '<h1>afiche tout les hotels</h1>';
+
+echo '<h2> Afiche tout les hotels </h2>';
 
 $hotelController = new HotelController();
 $hotels = $hotelController->obtenirTousLesHotels();

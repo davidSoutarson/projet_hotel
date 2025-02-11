@@ -67,3 +67,5 @@ try {
 } catch (PDOException $exception) {
     echo "Erreur lors de la création de la base de données : " . $exception->getMessage();
 }
+
+$creatDBTeste = "appel du fichier config/creation_database.php 02 OK";
