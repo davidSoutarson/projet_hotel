@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 );
                 $_SESSION['success'] = "Connexion entreprise réussie.";
                 // Redirection vers la page d'accueil. Utilisez BASE_URL si elle est définie.
-                header('Location: ../index.php');
+                header('Location: ../views/entreprise/formulaire_ajouter_hotel.php');
                 exit();
             } else {
                 // Si les informations sont incorrectes, détruire toute session existante

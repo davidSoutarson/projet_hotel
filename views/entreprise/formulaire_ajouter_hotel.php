@@ -1,5 +1,7 @@
 <?php require_once '../header.php'; ?>
 
+<p> Description pour le devoir ce fichier permet d'ajouter un hotel </p>
+
 <h2>Ajouter un Hôtel</h2>
 <form action="../../controllers/HotelController.php" method="POST" enctype="multipart/form-data">
     <label for="nom">Nom :</label>
