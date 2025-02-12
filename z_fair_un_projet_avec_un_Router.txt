@@ -1,0 +1,236 @@
+
+1 Structure du Projet avec un Router
+Avec un routeur, voici comment le projet va fonctionner :
+
+Toutes les requêtes passent par index.php
+
+index.php appelle router.php
+
+router.php analyse l’URL et redirige vers le bon contrôleur
+
+Le contrôleur charge la vue correspondante
+
+
+2 Fichier index.php
+Ton index.php devient très simple, il se contente d’inclure router.php :
+
+php
+Copier
+Modifier
+<?php
+require 'config/configuration.php';
+require 'router.php';
+?>
+
+3 Fichier router.php (Le Routeur)
+Ce fichier va analyser l’URL et charger le bon contrôleur.
+
+Exemple de router.php :
+php
+Copier
+Modifier
+<?php
+// Vérifier si une page est demandée, sinon charger la page d'accueil
+$page = isset($_GET['page']) ? $_GET['page'] : 'home';
+
+// Protection contre les attaques (ex: injection XSS)
+$page = htmlspecialchars($page);
+
+// Liste des routes (URL -> Contrôleur)
+$routes = [
+    'home' => 'controllers/HotelController.php',
+    'login_entreprise' => 'controllers/ConnexionEntrController.php',
+    'login_utilisateur' => 'controllers/ConnexionUtilController.php',
+    'inscription_entreprise' => 'controllers/UtilisateurController.php',
+    'inscription_utilisateur' => 'controllers/UtilisateurController.php',
+    'reservation' => 'controllers/ReservationController.php',
+];
+
+// Vérifier si la route demandée existe
+if (array_key_exists($page, $routes)) {
+    require $routes[$page];
+} else {
+    require 'views/404.php'; // Page d'erreur si la route n'existe pas
+}
+?>
+
+4 Exemple d'un Contrôleur (HotelController.php)
+Chaque contrôleur peut maintenant gérer les actions et appeler la bonne vue.
+
+php
+Copier
+Modifier
+<?php
+class HotelController {
+    public function index() {
+        require 'views/hotel/liste_hotels.php';
+    }
+}
+
+// Création du contrôleur et appel de la méthode
+$controller = new HotelController();
+$controller->index();
+?>
+
+5️ Ajout d’une Réécriture d’URL (.htaccess)
+Actuellement, les URLs ressemblent à ça :
+
+http://mon-site.com/index.php?page=login_utilisateur
+On peut les rendre plus propres avec .htaccess :
+
+http://mon-site.com/login_utilisateur
+Créer un fichier .htaccess à la racine :
+
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^([a-zA-Z0-9_-]+)$ index.php?page=$1 [QSA,L]
+
+Explication :
+
+Si l’URL demandée n’est pas un fichier ou un dossier existant, elle est redirigée vers index.php?page=....
+
+Exemple : http://mon-site.com/login_utilisateur devient index.php?page=login_utilisateur en interne.
+
+6 Résumé
+. Le routeur router.php redirige vers le bon contrôleur.
+. Les contrôleurs gèrent la logique et affichent la vue.
+. Une réécriture d’URL permet d’avoir des URLs plus propres
+
+7 Bonus : Gérer des Actions dans les Contrôleurs
+Si tu veux gérer plusieurs actions dans un même contrôleur, tu peux modifier router.php :
+
+$page = isset($_GET['page']) ? $_GET['page'] : 'home';
+$action = isset($_GET['action']) ? $_GET['action'] : 'index';
+
+$routes = [
+    'hotel' => 'controllers/HotelController.php',
+    'utilisateur' => 'controllers/UtilisateurController.php',
+];
+
+if (array_key_exists($page, $routes)) {
+    require $routes[$page];
+    $controllerName = ucfirst($page) . "Controller";
+    $controller = new $controllerName();
+    
+    if (method_exists($controller, $action)) {
+        $controller->$action();
+    } else {
+        require 'views/404.php';
+    }
+} else {
+    require 'views/404.php';
+}
+
+Exemple d’URL :
+
+http://mon-site.com/hotel?action=details
+
+=> Appellera la méthode details() dans HotelController.php.
+
+______________________________________________________________________________________________________________________________
+
+Plus en adequoition avec mon projet 
+
+
+I. ça fonctionne avec la session ?
+
+1. session_start(); dans header.php
+
+    .Permet de récupérer l’état de connexion de l’utilisateur (utilisateur/entreprise).
+    .Ce fichier est inclus dans chaque page, donc la session est toujours disponible.
+
+2. Le routeur (router.php) n’affecte pas la session
+
+.Il ne fait que rediriger vers les bons contrôleurs.
+
+.Les contrôleurs gèrent l’authentification et les actions utilisateur.
+
+3. Les contrôleurs peuvent modifier la session
+
+    .Exemple : SessionUtilController.php peut gérer la connexion/déconnexion et modifier $_SESSION['utilisateur'].
+
+
+II. Comment intégrer header.php avec le routeur ?
+
+1. Modifier index.php
+
+Ajoute header.php pour charger la session avant le routeur :
+
+<?php
+require 'config/configuration.php';
+require 'views/header.php'; // Charge l’en-tête avec la session
+require 'router.php'; // Redirige vers le bon contrôleur
+?>
+
+2. Exemple de router.php amélioré
+
+Ajoute une vérification de session et redirige correctement :
+
+<?php
+// Vérifier si une page est demandée, sinon charger la page d'accueil
+$page = isset($_GET['page']) ? $_GET['page'] : 'home';
+
+// Protection contre les attaques (ex: injection XSS)
+$page = htmlspecialchars($page);
+
+// Liste des routes disponibles
+$routes = [
+    'home' => 'controllers/HotelController.php',
+    'login_utilisateur' => 'controllers/ConnexionUtilController.php',
+    'login_entreprise' => 'controllers/ConnexionEntrController.php',
+    'reservation' => 'controllers/ReservationController.php',
+    'deconnexion_utilisateur' => 'controllers/SessionUtilController.php?action=deconnexion',
+    'deconnexion_entreprise' => 'controllers/SessionEntrController.php?action=deconnexion',
+];
+
+// Vérifier si la route demandée existe
+if (array_key_exists($page, $routes)) {
+    require $routes[$page];
+} else {
+    require 'views/404.php'; // Page 404 si la route est inconnue
+}
+?>
+
+III. Comment un utilisateur est géré dans la session ?
+
+1️. Exemple : SessionUtilController.php (Connexion/Déconnexion)
+
+<?php
+session_start();
+
+class SessionUtilController {
+    public function connexion() {
+        // Simule une connexion utilisateur (à remplacer par une vérification en base de données)
+        $_SESSION['utilisateur'] = [
+            'prenom' => 'Jean',
+            'nom' => 'Dupont',
+        ];
+        $_SESSION['success'] = "Connexion réussie.";
+        header("Location: index.php?page=home");
+        exit;
+    }
+
+    public function deconnexion() {
+        unset($_SESSION['utilisateur']);
+        $_SESSION['success'] = "Déconnexion réussie.";
+        header("Location: index.php?page=home");
+        exit;
+    }
+}
+
+// Vérifier quelle action appeler
+$action = isset($_GET['action']) ? $_GET['action'] : 'connexion';
+$controller = new SessionUtilController();
+
+if (method_exists($controller, $action)) {
+    $controller->$action();
+} else {
+    echo "Action inconnue.";
+}
+?>
+
+ Résumé
+. Le routeur fonctionne avec les sessions.
+. header.php affiche la connexion en fonction de $_SESSION.
+. Les contrôleurs gèrent la connexion et la déconnexion.

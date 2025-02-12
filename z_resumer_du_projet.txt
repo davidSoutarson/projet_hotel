@@ -6,8 +6,13 @@ projet_hotel
 |   |__configuration.php
 |   |__creation.php
 |__controllers/
+|   |__connexionEntrController.php
+|   |__connexionUtilController.php
 |   |__EntrepriseController.php
 |   |__HotelController.php
+|   |__ReservationController.php
+|   |__SessionEntrController.php
+|   |__SessionUtilController.php
 |   |__UtilisateurController.php
 |__css/
 |   |__style.css
@@ -19,13 +24,14 @@ projet_hotel
 |   |__Hotel.php
 |   |__Reservation.php
 |   |__Utilisateur.php
+|__uploads/
 |__views/
 |   |__entreprise/
 |   |   |__formulaire_ajouter_chambre.php
 |   |   |__formulaire_ajouter_hotel.php
 |   |   |__formulaire_connexion_entr.php
 |   |   |__formulaire_inscription_entr.php
-|   |__holel/
+|   |__hotel/
 |   |   |__liste_hotels.php
 |   |__utilisateur/
 |   |   |__formulaire_connexion_util.php
@@ -35,7 +41,14 @@ projet_hotel
 |   |__footer.php
 |__index.php
 
-jai besoit de tont aide pour cree tout le vue
 
-un header commun a tout toute les vues. 
-Le header permet d’appliquer un style CSS a toutes les vues, les menus de navigation, et l’Etat des différentes sessions.
+ Amélioration url
+ Méthode simple : index.php?page=... permet d'afficher dynamiquement des pages.
+ 
+ Sécurisation : Vérifie si la page demandée est autorisée.
+ 
+ Amélioration : Utilise .htaccess pour des URLs plus propres.
+
+ou ou les deux ? 
+
+Voire. z_fair_un_projet_avec_un_Router.txt
