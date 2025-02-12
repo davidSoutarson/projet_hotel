@@ -1,80 +1,84 @@
 <?php
-// Inclusion du modèle Hotel
 require_once __DIR__ . '/../models/Hotel.php';
-// Inclusion du contrôleur de session entreprise (pour vérifier si l'entreprise est connectée)
 require_once __DIR__ . '/../controllers/SessionEntrController.php';
 
 class HotelController
 {
     private $hotelModel;
 
-    /**
-     * Constructeur : instancie le modèle Hotel.
-     */
     public function __construct()
     {
         $this->hotelModel = new Hotel();
     }
 
+    public function ajouterHotel($nomHotel, $adresseHotel, $telephoneHotel, $description_hotel, $photoHotel, $id_entreprise)
+    {
+        if (!SessionEntrController::verifierSession()) {
+            header('Location: ../views/entreprise/formulaire_connexion_entr.php?erreur=non_connecte');
+            exit();
+        }
+
+        if (empty($nomHotel) || empty($adresseHotel) || empty($telephoneHotel) || empty($photoHotel)) {
+            header('Location: ../views/entreprise/formulaire_ajouter_hotel.php?erreur=donnees_manquantes');
+            exit();
+        }
+
+        $idHotel = $this->hotelModel->ajouterHotel($nomHotel, $adresseHotel, $telephoneHotel, $description_hotel, $photoHotel, $id_entreprise);
+
+        if ($idHotel) {
+            header("Location: ../views/entreprise/formulaire_ajouter_chambre.php?hotel=$idHotel&success=hotel_ajoute");
+        } else {
+            header('Location: ../views/entreprise/formulaire_ajouter_hotel.php?erreur=echec_enregistrement');
+        }
+        exit();
+    }
+
     /**
-     * Retourne la liste de tous les hôtels.
+     * Cette méthode récupère tous les hôtels à partir du modèle Hotel
      *
-     * @return array La liste des hôtels.
+     * @return array Liste des hôtels
      */
     public function obtenirTousLesHotels()
     {
-        return $this->hotelModel->obtenirHotels();
-    }
-
-    /**
-     * Ajoute un nouvel hôtel à la base de données.
-     *
-     * Avant d'ajouter, on vérifie si l'entreprise est connectée.
-     * En cas de succès, on redirige vers le formulaire d'ajout des chambres,
-     * sinon, on redirige vers le formulaire d'ajout d'hôtel avec un message d'erreur.
-     *
-     * @param string $nomHotel        Le nom de l'hôtel.
-     * @param string $adresseHotel    L'adresse de l'hôtel.
-     * @param string $telephoneHotel  Le téléphone de l'hôtel.
-     * @param string $descriptionHotel La description de l'hôtel.
-     * @param string $photoHotel      Le chemin ou nom de fichier de la photo.
-     */
-    public function ajouterHotel($nomHotel, $adresseHotel, $telephoneHotel, $descriptionHotel, $photoHotel)
-    {
-        // Vérifie si une session entreprise est active
-        if (!SessionEntrController::verifierSession()) {
-            // Redirection vers le formulaire de connexion entreprise si non connecté
-            header('Location: ../views/entreprise/formulaire_connexion_entr.php?erreur=connexion');
-            exit();
-        }
-
-        // Ajout de l'hôtel via le modèle
-        $resultat = $this->hotelModel->ajouterHotel($nomHotel, $adresseHotel, $telephoneHotel, $descriptionHotel, $photoHotel);
-
-        if ($resultat) {
-            // Récupère l'ID du dernier hôtel inséré pour pouvoir l'utiliser dans l'ajout des chambres
-            $idHotel = $this->hotelModel->recupererDernierId();
-            // Redirection vers le formulaire d'ajout de chambre en passant l'ID de l'hôtel
-            header('Location: ../views/entreprise/formulaire_ajouter_chambre.php?hotel=' . urlencode($idHotel));
-            exit();
-        } else {
-            // En cas d'erreur lors de l'ajout de l'hôtel, on redirige vers le formulaire d'ajout d'hôtel avec un message d'erreur
-            header('Location: ../views/entreprise/formulaire_ajouter_hotel.php?erreur=ajout');
-            exit();
-        }
+        return $this->hotelModel->obtenirHotels(); // Appelle la méthode obtenirHotels() du modèle Hotel
     }
 }
 
-// Exemple d'utilisation :
-// Vérifie si une soumission POST a été effectuée pour l'ajout d'un nouvel hôtel
+// Vérification avant de traiter le formulaire
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'ajouter_hotel') {
     $hotelController = new HotelController();
-    // Récupère les données du formulaire (en les filtrant si nécessaire)
-    $nomHotel = $_POST['nom'] ?? '';
-    $adresseHotel = $_POST['adresse'] ?? '';
-    $telephoneHotel = $_POST['telephone'] ?? '';
-    $descriptionHotel = $_POST['description'] ?? '';
-    $photoHotel = $_FILES['photo']['name'] ?? ''; // Exemple de récupération de nom de fichier
 
-    $hotelController->ajouterHotel($nomHotel, $adresseHotel, $telephoneHotel, $descriptionHotel, $photoHotel);
+    $nom = trim($_POST['nom'] ?? '');
+    $adresse = trim($_POST['adresse'] ?? '');
+    $telephone = trim($_POST['telephone'] ?? '');
+    $description_hotel = trim($_POST['description'] ?? '');
+    $photo = $_FILES['photo']['name'] ?? '';
+
+    // Récupération de l'ID de l'entreprise connectée
+    $id_entreprise = SessionEntrController::getIdEntreprise();
+    if (!$id_entreprise) {
+        header('Location: ../views/entreprise/formulaire_connexion_entr.php?erreur=non_connecte');
+        exit();
+    }
+
+    if ($photo && $_FILES['photo']['tmp_name']) {
+        $uploadDir = __DIR__ . '/../uploads/'; // Le répertoire d'uploads
+        if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
+
+        $extension = pathinfo($photo, PATHINFO_EXTENSION);
+        $photoName = uniqid('hotel_') . '.' . $extension;
+        $uploadFile = 'uploads/' . $photoName; // Utilisation d'un chemin relatif
+
+        // Déplacer l'image dans le répertoire 'uploads'
+        if (move_uploaded_file($_FILES['photo']['tmp_name'], __DIR__ . '/../uploads/' . $photoName)) {
+            // Passe le chemin relatif de l'image à la méthode ajouterHotel
+            $hotelController->ajouterHotel($nom, $adresse, $telephone, $description_hotel, $uploadFile, $id_entreprise);
+        } else {
+            header('Location: ../views/entreprise/formulaire_ajouter_hotel.php?erreur=echec_upload');
+            exit();
+        }
+    } else {
+        header('Location: ../views/entreprise/formulaire_ajouter_hotel.php?erreur=photo_manquante');
+        exit();
+    }
 }

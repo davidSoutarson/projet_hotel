@@ -59,7 +59,6 @@ form {
 }
 .vignette-hotel {
   border: 1px solid #ccc;
-  padding: 10px;
   background-color: #f9f9f9;
 }
 
@@ -67,4 +66,17 @@ form {
   border: 1px solid red;
   width: 70%;
   margin: auto;
+}
+
+.boite_image_hotel {
+  margin: auto;
+  width: 195px;
+  height: 195px;
+  border: solid black 1px;
+}
+
+.image_hotel {
+  margin: auto;
+  width: 190px;
+  height: 190px;
 }

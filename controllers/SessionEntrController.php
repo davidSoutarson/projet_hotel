@@ -86,6 +86,20 @@ class SessionEntrController
     {
         return $_SESSION['entreprise'] ?? null;
     }
+
+    /**
+     * Récupère l'ID de l'entreprise connectée.
+     *
+     * @return int|null L'ID de l'entreprise ou null si non connecté.
+     */
+    public static function getIdEntreprise()
+    {
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            session_start();
+        }
+
+        return $_SESSION['entreprise']['id'] ?? null;
+    }
 }
 
 // Gestion de l'action "deconnexion"

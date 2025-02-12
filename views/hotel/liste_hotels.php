@@ -7,7 +7,7 @@ if (!empty($hotels)) {
         echo '<p>' . $hotel['adresse'] . '</p>';
         echo '<p>' . $hotel['telephone'] . '</p>';
         echo '<p>' . $hotel['description_hotel'] . '</p>';
-        echo '<div>' . $hotel['photo_hotel'] . '</div>';
+        echo '<div class="boite_image_hotel"><img class="image_hotel" src="' . $hotel['photo_hotel'] . '" alt="Photo de l\'hôtel"></div>';
         echo '</div>';
     }
     echo '</div>';
