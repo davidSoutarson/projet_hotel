@@ -95,7 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 
     // Gestion de l'upload de la photo
     if ($photo && $_FILES['photo']['tmp_name']) {
-        $uploadDir = __DIR__ . '/../uploads/';
+        $uploadDir = 'uploads';
         if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
 
         $extension = strtolower(pathinfo($photo, PATHINFO_EXTENSION));
@@ -114,13 +114,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             exit();
         }
 
+        /* creation du chemin de fichier  */
         $photoName = uniqid('hotel_') . '.' . $extension;
         $uploadFile = $uploadDir . $photoName;
 
         // Déplacer le fichier téléchargé dans le répertoire
         if (move_uploaded_file($_FILES['photo']['tmp_name'], $uploadFile)) {
             // Appeler la méthode pour ajouter l'hôtel avec la photo
-            $hotelController->ajouterHotel($nom, $adresse, $telephone, $description_hotel, $nombre_chambre, $uploadFile, $id_entreprise);
+            $hotelController->ajouterHotel($nom, $adresse, $telephone, $description_hotel, $nombre_chambres, $uploadFile, $id_entreprise);
         } else {
             header('Location: ../views/entreprise/formulaire_ajouter_hotel.php?erreur=echec_upload');
             exit();
