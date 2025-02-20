@@ -1,0 +1,24 @@
+Modificaction apporter par la vertion V 0.30 
+
+A laide de id hotel:
+
+Ajouter le prix le plus bas et et prix le plus haut au vignette hôtle :: ok fontionelle
+
+Entourer les vignettes hotels d'une fontion de setlection un que lon clique sur un hôtel :: ok fontionelle
+
+On et rediriger vere une selection de chambre corepondant cette hôtel
+
+Avant la redirection et a laide du fichier controleur/SessionUtilController.php et ou
+
+Verifier la validiter de la conection utilisateur avec la setion utilisateur
+
+A laide de id hôtel et a laide de l'id  de la chambre selection 
+
+Efectuer une reservation
+__________________________________________________________________________________________________________
+
+Option a jouter:
+
+ - Ajouter une ville au hotelle
+
+ - Ajouter un barre de recher des hotelle par ville  par prix 
