@@ -72,6 +72,22 @@ class HotelController
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function obtenirPrixMin($id_hotel)
+    {
+        $sql = "SELECT MIN(prix) as prix_min FROM chambres WHERE id_hotel = ?";
+        $stmt = $this->connexion->prepare($sql);
+        $stmt->execute([$id_hotel]);
+        return $stmt->fetchColumn() ?? 0;
+    }
+
+    public function obtenirPrixMax($id_hotel)
+    {
+        $sql = "SELECT MAX(prix) as prix_max FROM chambres WHERE id_hotel = ?";
+        $stmt = $this->connexion->prepare($sql);
+        $stmt->execute([$id_hotel]);
+        return $stmt->fetchColumn() ?? 0;
+    }
 }
 
 // Traitement du formulaire
