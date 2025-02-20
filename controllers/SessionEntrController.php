@@ -101,6 +101,11 @@ class SessionEntrController
         return $_SESSION['entreprise']['id'] ?? null;
     }
 
+    public static function getEntrepriseId()
+    {
+        return $_SESSION['entreprise']['id'] ?? null;
+    }
+
     public static function getHotelId()
     {
         return $_SESSION['id_hotel'] ?? null;

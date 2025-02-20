@@ -1,17 +1,37 @@
 <?php
 require_once __DIR__ . '/../../models/Chambre.php';
 require_once __DIR__ . '/../../models/Hotel.php';
+require_once __DIR__ . '/../../controllers/SessionEntrController.php';  // Ajouter le contrôleur pour vérifier la session entreprise
 
+// Vérifier si l'entreprise est connectée
+if (!SessionEntrController::verifierSession()) {
+    header('Location: ../entreprise/formulaire_connexion_entr.php?erreur=non_connecte');
+    exit();
+}
+
+// Récupérer l'ID de l'entreprise depuis la session
+$id_entreprise = SessionEntrController::getEntrepriseId();
+
+// Récupérer l'ID de l'hôtel depuis l'URL
 $hotelId = $_GET['hotel'] ?? null;
 
+// Vérifier si l'ID de l'hôtel est spécifié et si cet hôtel appartient à l'entreprise
 if (!$hotelId) {
     die("ID d'hôtel non spécifié.");
 }
 
+// Instancier les modèles
 $chambreModel = new Chambre();
 $hotelModel = new Hotel();
 
+// Vérifier si l'hôtel appartient à l'entreprise connectée
 $hotel = $hotelModel->obtenirHotelParId($hotelId);
+
+if (!$hotel || $hotel['id_entreprise'] !== $id_entreprise) {
+    die("Cet hôtel ne vous appartient pas ou il n'existe pas.");
+}
+
+// Obtenir les chambres pour cet hôtel
 $chambres = $chambreModel->obtenirChambresParHotel($hotelId);
 
 ?>

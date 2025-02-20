@@ -9,52 +9,84 @@ if (!SessionEntrController::verifierSession()) {
     exit();
 }
 
-// Récupérer l'ID de l'hôtel depuis l'URL ou la session
-$id_hotel = isset($_GET['hotel']) ? (int)$_GET['hotel'] : (SessionEntrController::getHotelId() ?? 0);
+// Récupérer l'ID de l'entreprise à partir de la session
+$id_entreprise = SessionEntrController::getEntrepriseId();
+
+// Récupérer la liste des hôtels de l'entreprise
+$hotelController = new HotelController();
+$hotels = $hotelController->obtenirHotelsParEntreprise($id_entreprise);
+
+
+/* echo "<pre>";
+var_dump($_SESSION);
+echo "<pre>";
+var_dump($id_entreprise);
+echo "</br>";
+var_dump($hotels); */
+
+// Vérifier si un hôtel a été sélectionné
+$id_hotel = isset($_POST['id_hotel']) ? (int) $_POST['id_hotel'] : 0;
+$nombre_de_chambres = 0;
 
 if ($id_hotel > 0) {
-    // Récupérer le nombre de chambres de l'hôtel
-    $hotelController = new HotelController();
+    // Récupérer le nombre de chambres pour cet hôtel
     $nombre_de_chambres = $hotelController->obtenirNombreDeChambres($id_hotel);
-} else {
-    die("ID d'hôtel non spécifié ou invalide.");
 }
 ?>
 
 <h2>Ajouter des Chambres</h2>
 
-<form action="../../controllers/ChambreController.php" method="POST" enctype="multipart/form-data">
-    <input type="hidden" name="id_hotel" value="<?= htmlspecialchars($id_hotel) ?>">
-
-    <?php for ($i = 1; $i <= $nombre_de_chambres; $i++) : ?>
-        <fieldset>
-            <legend>Chambre <?= $i ?></legend>
-
-            <label for="numero_<?= $i ?>">Numéro :</label>
-            <input type="text" id="numero_<?= $i ?>" name="numero[]" required><br>
-
-            <label for="prix_<?= $i ?>">Prix :</label>
-            <input type="number" id="prix_<?= $i ?>" name="prix[]" required><br>
-
-            <label for="nombre_lits_<?= $i ?>">Nombre de lits :</label>
-            <input type="number" id="nombre_lits_<?= $i ?>" name="nombre_lits[]" required><br>
-
-            <label for="description_chambre_<?= $i ?>">Description :</label>
-            <textarea id="description_chambre_<?= $i ?>" name="description_chambre[]"></textarea><br>
-
-            <label for="photo_chambre_<?= $i ?>">Photo :</label>
-            <input type="file" id="photo_chambre_<?= $i ?>" name="photo_chambre[]" accept="image/*"><br>
-
-            <label for="etat_<?= $i ?>">État :</label>
-            <select id="etat_<?= $i ?>" name="etat[]">
-                <option value="libre">Libre</option>
-                <option value="reserve">Réservé</option>
-            </select><br>
-        </fieldset>
-        <br>
-    <?php endfor; ?>
-
-    <button type="submit">Ajouter Chambres</button>
+<!-- Étape 1 : Sélection de l'hôtel -->
+<form action="formulaire_ajouter_chambre.php" method="POST">
+    <label for="hotel">Sélectionner l'hôtel :</label>
+    <select id="hotel" name="id_hotel" required onchange="this.form.submit()">
+        <option value="">-- Choisir un hôtel --</option>
+        <?php foreach ($hotels as $hotel) : ?>
+            <option value="<?= htmlspecialchars($hotel['id']) ?>" <?= ($id_hotel == $hotel['id']) ? 'selected' : '' ?>>
+                <?= htmlspecialchars($hotel['nom']) ?>
+            </option>
+        <?php endforeach; ?>
+    </select>
+    <noscript><button type="submit">Sélectionner</button></noscript>
 </form>
+
+<!-- Étape 2 : Affichage du formulaire si un hôtel est sélectionné -->
+<?php if ($id_hotel > 0 && $nombre_de_chambres > 0) : ?>
+    <form action="../../controllers/ChambreController.php" method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="id_hotel" value="<?= htmlspecialchars($id_hotel) ?>">
+
+        <?php for ($i = 1; $i <= $nombre_de_chambres; $i++) : ?>
+            <fieldset>
+                <legend>Chambre <?= $i ?></legend>
+
+                <label for="numero_<?= $i ?>">Numéro :</label>
+                <input type="text" id="numero_<?= $i ?>" name="numero[]" required><br>
+
+                <label for="prix_<?= $i ?>">Prix :</label>
+                <input type="number" id="prix_<?= $i ?>" name="prix[]" required><br>
+
+                <label for="nombre_lits_<?= $i ?>">Nombre de lits :</label>
+                <input type="number" id="nombre_lits_<?= $i ?>" name="nombre_lits[]" required><br>
+
+                <label for="description_chambre_<?= $i ?>">Description :</label>
+                <textarea id="description_chambre_<?= $i ?>" name="description_chambre[]"></textarea><br>
+
+                <label for="photo_chambre_<?= $i ?>">Photo :</label>
+                <input type="file" id="photo_chambre_<?= $i ?>" name="photo_chambre[]" accept="image/*"><br>
+
+                <label for="etat_<?= $i ?>">État :</label>
+                <select id="etat_<?= $i ?>" name="etat[]">
+                    <option value="libre">Libre</option>
+                    <option value="reserve">Réservé</option>
+                </select><br>
+            </fieldset>
+            <br>
+        <?php endfor; ?>
+
+        <button type="submit">Ajouter Chambres</button>
+    </form>
+<?php elseif ($id_hotel > 0) : ?>
+    <p>Cet hôtel ne permet pas d'ajouter de nouvelles chambres.</p>
+<?php endif; ?>
 
 <?php require_once '../footer.php'; ?>

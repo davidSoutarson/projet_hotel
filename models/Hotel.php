@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../config/configuration.php';
+
 class Hotel
 {
     private $connexion;
@@ -19,17 +20,17 @@ class Hotel
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function ajouterHotel($nomHotel, $adresseHotel, $telephoneHotel, $description_hotel, $nombre_chambre, $photoHotel, $id_entreprise)
+    public function ajouterHotel($nomHotel, $adresseHotel, $telephoneHotel, $description_hotel, $nombre_chambres, $photoHotel, $id_entreprise)
     {
-        $requete = "INSERT INTO " . $this->table . " (nom, adresse, telephone, description_hotel, nombre_chambre, photo_hotel, id_entreprise) 
-                VALUES (:nom, :adresse, :telephone, :description_hotel,:nombre_chambre, :photo_hotel, :id_entreprise)";
+        $requete = "INSERT INTO " . $this->table . " (nom, adresse, telephone, description_hotel, nombre_chambres, photo_hotel, id_entreprise) 
+                VALUES (:nom, :adresse, :telephone, :description_hotel,:nombre_chambres, :photo_hotel, :id_entreprise)";
 
         $stmt = $this->connexion->prepare($requete);
         $stmt->bindParam(':nom', $nomHotel);
         $stmt->bindParam(':adresse', $adresseHotel);
         $stmt->bindParam(':telephone', $telephoneHotel);
         $stmt->bindParam(':description_hotel', $description_hotel); // Correction du paramètre
-        $stmt->bindParam(':nombre_chambre', $nombre_chambre); // Correction du paramètre
+        $stmt->bindParam(':nombre_chambres', $nombre_chambres); // Correction du paramètre
         $stmt->bindParam(':photo_hotel', $photoHotel); // Correction du paramètre
         $stmt->bindParam(':id_entreprise', $id_entreprise);
 
@@ -47,7 +48,7 @@ class Hotel
 
     public function getNombreChambres($id_hotel)
     {
-        $sql = "SELECT nombre_chambre FROM hotels WHERE id = :id_hotel";
+        $sql = "SELECT nombre_chambres FROM hotels WHERE id = :id_hotel";
         $stmt = $this->connexion->prepare($sql);
         $stmt->bindParam(':id_hotel', $id_hotel, PDO::PARAM_INT);
         $stmt->execute();

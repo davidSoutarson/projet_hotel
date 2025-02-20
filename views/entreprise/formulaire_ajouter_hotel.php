@@ -1,4 +1,13 @@
-<?php require_once '../header.php'; ?>
+<?php require_once '../header.php';
+require_once '../../controllers/SessionEntrController.php';
+
+// Vérifier si l'entreprise est connectée
+if (!SessionEntrController::verifierSession()) {
+    header('Location: ../entreprise/formulaire_connexion_entr.php?erreur=non_connecte');
+    exit();
+}
+
+?>
 
 <p> Description pour le devoir : ce fichier permet d'ajouter un hôtel </p>
 
@@ -18,8 +27,8 @@
     <label for="description">Description :</label>
     <textarea id="description" name="description"></textarea><br>
 
-    <label for="nombre_de_chambre">Nombre de chambre:</label>
-    <input type="number" id="nombre_de_chambre" name="nombre_de_chambre"><br>
+    <label for="nombre_de_chambres">Nombre de chambre:</label>
+    <input type="number" id="nombre_chambres" name="nombre_chambres"><br>
 
     <label for=" photo">Photo :</label>
     <input type="file" id="photo" name="photo" accept="image/*"><br>

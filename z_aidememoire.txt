@@ -1,0 +1,98 @@
+Le code que vous avez partagé montre une structure pour gérer l'ajout des chambres à un hôtel. Cependant, vous avez mentionné un problème avec la ligne suivante dans le fichier HotelController.php :
+
+php
+Copier
+Modifier
+$stmt = $this->hotelModel->connexion->prepare($requete);
+Cela peut poser problème si connexion n'est pas correctement défini ou si la connexion à la base de données échoue. Pour résoudre ce problème, assurez-vous que la connexion à la base de données dans la classe Hotel (et dans la classe Chambre) est correctement établie.
+
+Voici quelques vérifications et suggestions pour corriger ce problème :
+
+1. Vérifier que connexion est bien définie et valide :
+Dans la classe HotelController, vous devez vous assurer que $this->connexion est une instance valide de PDO. Vous avez initialisé la connexion à la base de données dans la classe Hotel via $this->connexion = $database->obtenirConnexion();, ce qui signifie que connexion est correctement définie dans HotelController.
+
+Correction possible : Utilisez directement connexion de la classe HotelController comme dans le fichier HotelController.php :
+
+php
+Copier
+Modifier
+$stmt = $this->connexion->prepare($requete); // Remplacez hotelModel->connexion par connexion
+La ligne devient alors :
+
+php
+Copier
+Modifier
+$stmt = $this->connexion->prepare($requete);
+Explication : Vous pouvez directement utiliser $this->connexion dans le HotelController car il a été correctement initialisé via l'objet Database.
+
+2. Vérifier que la classe Database fonctionne correctement :
+La classe Database semble être responsable de la gestion de la connexion à la base de données. Assurez-vous que la méthode obtenirConnexion() retourne bien une connexion PDO valide. Si ce n’est pas le cas, vérifiez votre classe Database.
+
+Exemple de méthode obtenirConnexion() dans la classe Database :
+
+php
+Copier
+Modifier
+public function obtenirConnexion()
+{
+    try {
+        $connexion = new PDO($this->dsn, $this->username, $this->password);
+        $connexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        return $connexion;
+    } catch (PDOException $e) {
+        die("Erreur de connexion : " . $e->getMessage());
+    }
+}
+3. Vérifier la gestion des erreurs dans ajouterChambre :
+Si l’erreur persiste malgré la modification de HotelController.php, vous pourriez vouloir afficher plus d’informations sur l’erreur en cas d’échec de la requête SQL. Enregistrez et affichez les erreurs de PDO pour mieux comprendre ce qui se passe :
+
+php
+Copier
+Modifier
+if (!$stmt->execute()) {
+    // Afficher des informations détaillées sur l'erreur
+    echo "Erreur SQL: " . implode(", ", $stmt->errorInfo());
+    return false;
+}
+4. Gérer correctement les données dans la méthode ajouterChambre :
+Assurez-vous que les valeurs envoyées via le formulaire sont bien capturées et que vous gérez correctement les fichiers téléchargés pour les photos. Vérifiez également si la photo est bien un fichier valide et si la base de données accepte le chemin du fichier dans le champ photo.
+
+Exemple de code pour gérer correctement l'ajout d'une chambre :
+Voici une structure améliorée du code dans ChambreController.php pour l'ajout de chambres avec validation de formulaire et téléchargement de fichiers.
+
+php
+Copier
+Modifier
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $chambreController = new ChambreController();
+
+    $id_hotel = $_POST['id_hotel'];
+    $nombre_chambres = $_POST['nombre_chambres'];
+
+    // Boucle pour ajouter chaque chambre
+    for ($i = 0; $i < $nombre_chambres; $i++) {
+        $numero = $_POST['numero'][$i];
+        $prix = $_POST['prix'][$i];
+        $nombre_lits = $_POST['nombre_lits'][$i];
+        $description = $_POST['description_chambre'][$i];
+        $etat = $_POST['etat'][$i];
+
+        // Gestion de la photo
+        $photo = "";
+        if (isset($_FILES['photo_chambre']['tmp_name'][$i]) && $_FILES['photo_chambre']['tmp_name'][$i]) {
+            $photo = $uploadDir . uniqid('chambre_') . '.' . pathinfo($_FILES['photo_chambre']['name'][$i], PATHINFO_EXTENSION);
+            move_uploaded_file($_FILES['photo_chambre']['tmp_name'][$i], $photo);
+        }
+
+        // Ajouter la chambre à la base de données
+        $chambreController->ajouterChambre($numero, $prix, $nombre_lits, $description, $photo, $etat, $id_hotel);
+    }
+}
+Cela vous permettra d'ajouter plusieurs chambres tout en gérant les fichiers de manière sécurisée.
+
+Conclusion :
+En résumé, vous devez :
+
+Vous assurer que vous utilisez correctement la connexion ($this->connexion).
+Ajouter un peu plus de gestion d'erreur pour comprendre pourquoi la requête échoue si l'erreur persiste.
+Vérifier la classe Database pour vous assurer qu’elle renvoie une connexion PDO valide.

@@ -3,6 +3,7 @@
 require_once '../config/configuration.php';
 require_once 'SessionEntrController.php';
 
+
 /**
  * Nettoie une chaîne de caractères en supprimant les balises HTML et en échappant les caractères spéciaux.
  *

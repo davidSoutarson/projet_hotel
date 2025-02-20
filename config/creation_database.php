@@ -35,7 +35,7 @@ try {
         adresse TEXT NOT NULL,
         telephone VARCHAR(20),
         description_hotel TEXT,
-        nombre_chambre INT NULL,
+        nombre_chambres INT DEFAULT 0,
         photo_hotel VARCHAR(255),
         id_entreprise INT NOT NULL,
         FOREIGN KEY (id_entreprise) REFERENCES entreprises(id)
