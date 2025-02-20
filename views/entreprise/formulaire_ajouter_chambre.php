@@ -60,8 +60,8 @@ if ($id_hotel > 0) {
         <?php
         // Ici, on détermine combien de chambres peuvent être ajoutées.
         // Selon la logique, vous pouvez fixer un nombre maximum ou utiliser le nombre existant.
-        // Pour l'exemple, on affiche un formulaire pour ajouter 3 chambres.
-        $nbChambresAAjouter = 3;
+        // je vais a ficher les champd de formulair  auten de fois qu' il y a de chambre dans l'hotel
+        $nbChambresAAjouter = $nombre_de_chambres;
         for ($i = 1; $i <= $nbChambresAAjouter; $i++) :
         ?>
             <fieldset>
