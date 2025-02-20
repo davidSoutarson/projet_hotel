@@ -9,32 +9,28 @@ if (!SessionEntrController::verifierSession()) {
     exit();
 }
 
-// Récupérer l'ID de l'entreprise à partir de la session
+// Récupérer l'ID de l'entreprise depuis la session
 $id_entreprise = SessionEntrController::getEntrepriseId();
 
 // Récupérer la liste des hôtels de l'entreprise
 $hotelController = new HotelController();
 $hotels = $hotelController->obtenirHotelsParEntreprise($id_entreprise);
 
+// Récupérer l'ID de l'hôtel depuis POST ou GET (pour compatibilité avec le lien du fichier 4)
+$id_hotel = 0;
+if (isset($_POST['id_hotel']) && !empty($_POST['id_hotel'])) {
+    $id_hotel = (int) $_POST['id_hotel'];
+} elseif (isset($_GET['hotel']) && !empty($_GET['hotel'])) {
+    $id_hotel = (int) $_GET['hotel'];
+}
 
-/* echo "<pre>";
-var_dump($_SESSION);
-echo "<pre>";
-var_dump($id_entreprise);
-echo "</br>";
-var_dump($hotels); */
-
-// Vérifier si un hôtel a été sélectionné
-$id_hotel = isset($_POST['id_hotel']) ? (int) $_POST['id_hotel'] : 0;
-$nombre_de_chambres = 0;/* ? */
-
-echo "id_hotel=" . $id_hotel . "</br>";
+$nombre_de_chambres = 0;
+echo "id_hotel=" . $id_hotel . "<br>";
 
 if ($id_hotel > 0) {
     // Récupérer le nombre de chambres pour cet hôtel
     $nombre_de_chambres = $hotelController->obtenirNombreDeChambres($id_hotel);
-
-    echo "nombre_de_chambres = " . $nombre_de_chambres . "</br>";
+    echo "nombre_de_chambres = " . $nombre_de_chambres . "<br>";
 }
 ?>
 
@@ -55,11 +51,19 @@ if ($id_hotel > 0) {
 </form>
 
 <!-- Étape 2 : Affichage du formulaire si un hôtel est sélectionné -->
-<?php if ($id_hotel > 0 && $nombre_de_chambres > 0) : ?>
+<?php if ($id_hotel > 0) : ?>
     <form action="../../controllers/ChambreController.php" method="POST" enctype="multipart/form-data">
+        <!-- Champ caché pour l'action -->
+        <input type="hidden" name="action" value="ajouter_chambre">
         <input type="hidden" name="id_hotel" value="<?= htmlspecialchars($id_hotel) ?>">
 
-        <?php for ($i = 1; $i <= $nombre_de_chambres; $i++) : ?>
+        <?php
+        // Ici, on détermine combien de chambres peuvent être ajoutées.
+        // Selon la logique, vous pouvez fixer un nombre maximum ou utiliser le nombre existant.
+        // Pour l'exemple, on affiche un formulaire pour ajouter 3 chambres.
+        $nbChambresAAjouter = 3;
+        for ($i = 1; $i <= $nbChambresAAjouter; $i++) :
+        ?>
             <fieldset>
                 <legend>Chambre <?= $i ?></legend>
 

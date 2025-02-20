@@ -34,8 +34,8 @@ class Chambre
      */
     public function ajouterChambre($numero, $prix, $nombre_lits, $description, $photo, $etat, $id_hotel)
     {
-        $requete = "INSERT INTO " . $this->table . " (numero, prix, nombre_lits, description, photo, etat, id_hotel) 
-                    VALUES (:numero, :prix, :nombre_lits, :description, :photo, :etat, :id_hotel)";
+        $requete = "INSERT INTO " . $this->table . " (numero, prix, nombre_lits, description_chambre, photo_chambre, etat, id_hotel) 
+                    VALUES (:numero, :prix, :nombre_lits, :description_chambre, :photo_chambre, :etat, :id_hotel)";
 
         $stmt = $this->connexion->prepare($requete);
 
@@ -43,8 +43,8 @@ class Chambre
         $stmt->bindParam(':numero', $numero);
         $stmt->bindParam(':prix', $prix);
         $stmt->bindParam(':nombre_lits', $nombre_lits);
-        $stmt->bindParam(':description', $description);
-        $stmt->bindParam(':photo', $photo);
+        $stmt->bindParam(':description_chambre', $description);
+        $stmt->bindParam(':photo_chambre', $photo);
         $stmt->bindParam(':etat', $etat);
         $stmt->bindParam(':id_hotel', $id_hotel);
 
