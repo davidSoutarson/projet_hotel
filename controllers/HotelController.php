@@ -95,9 +95,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 
     // Gestion de l'upload de la photo
     if ($photo && $_FILES['photo']['tmp_name']) {
-        $uploadDir = 'uploads';
-        if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
+        // Définir le chemin absolu du dossier "uploads"
+        $uploadDir = __DIR__ . '/../uploads/';
 
+        // Vérifier et créer le dossier s'il n'existe pas
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0755, true);
+        }
+
+        // Obtenir l'extension du fichier
         $extension = strtolower(pathinfo($photo, PATHINFO_EXTENSION));
 
         // Vérification de l'extension et taille du fichier
@@ -114,20 +120,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             exit();
         }
 
-        /* creation du chemin de fichier  */
+        // Générer un nom unique pour l'image
         $photoName = uniqid('hotel_') . '.' . $extension;
-        $uploadFile = $uploadDir . $photoName;
+        $uploadFile = $uploadDir . $photoName;  // Chemin complet de l'image
 
-        // Déplacer le fichier téléchargé dans le répertoire
+        // Déplacer le fichier téléchargé dans le dossier "uploads"
         if (move_uploaded_file($_FILES['photo']['tmp_name'], $uploadFile)) {
-            // Appeler la méthode pour ajouter l'hôtel avec la photo
-            $hotelController->ajouterHotel($nom, $adresse, $telephone, $description_hotel, $nombre_chambres, $uploadFile, $id_entreprise);
+            // Sauvegarder uniquement le nom du fichier dans la base de données
+            $photoPath = 'uploads/' . $photoName;
+
+            // Ajouter l'hôtel en enregistrant uniquement le chemin relatif
+            $hotelController->ajouterHotel($nom, $adresse, $telephone, $description_hotel, $nombre_chambres, $photoPath, $id_entreprise);
         } else {
             header('Location: ../views/entreprise/formulaire_ajouter_hotel.php?erreur=echec_upload');
             exit();
         }
-    } else {
-        header('Location: ../views/entreprise/formulaire_ajouter_hotel.php?erreur=photo_manquante');
-        exit();
     }
 }
