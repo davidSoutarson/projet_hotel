@@ -28,9 +28,13 @@ var_dump($hotels); */
 $id_hotel = isset($_POST['id_hotel']) ? (int) $_POST['id_hotel'] : 0;
 $nombre_de_chambres = 0;
 
+echo "id_hotel=" . $id_hotel . "</br>";
+
 if ($id_hotel > 0) {
     // Récupérer le nombre de chambres pour cet hôtel
     $nombre_de_chambres = $hotelController->obtenirNombreDeChambres($id_hotel);
+
+    echo "nombre_de_chambres = " . $nombre_de_chambres . "</br>";
 }
 ?>
 

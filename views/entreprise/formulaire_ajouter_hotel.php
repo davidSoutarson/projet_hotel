@@ -27,7 +27,7 @@ if (!SessionEntrController::verifierSession()) {
     <label for="description">Description :</label>
     <textarea id="description" name="description"></textarea><br>
 
-    <label for="nombre_de_chambres">Nombre de chambre:</label>
+    <label for="nombre_de_chambres">Nombre de chambres:</label>
     <input type="number" id="nombre_chambres" name="nombre_chambres"><br>
 
     <label for=" photo">Photo :</label>

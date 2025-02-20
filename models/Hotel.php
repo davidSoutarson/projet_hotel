@@ -29,9 +29,9 @@ class Hotel
         $stmt->bindParam(':nom', $nomHotel);
         $stmt->bindParam(':adresse', $adresseHotel);
         $stmt->bindParam(':telephone', $telephoneHotel);
-        $stmt->bindParam(':description_hotel', $description_hotel); // Correction du paramètre
-        $stmt->bindParam(':nombre_chambres', $nombre_chambres); // Correction du paramètre
-        $stmt->bindParam(':photo_hotel', $photoHotel); // Correction du paramètre
+        $stmt->bindParam(':description_hotel', $description_hotel);
+        $stmt->bindParam(':nombre_chambres', $nombre_chambres);
+        $stmt->bindParam(':photo_hotel', $photoHotel);
         $stmt->bindParam(':id_entreprise', $id_entreprise);
 
         if ($stmt->execute()) {
@@ -46,15 +46,6 @@ class Hotel
         return $this->connexion->lastInsertId();
     }
 
-    public function getNombreChambres($id_hotel)
-    {
-        $sql = "SELECT nombre_chambres FROM hotels WHERE id = :id_hotel";
-        $stmt = $this->connexion->prepare($sql);
-        $stmt->bindParam(':id_hotel', $id_hotel, PDO::PARAM_INT);
-        $stmt->execute();
-        return $stmt->fetchColumn(); // Retourne directement le nombre
-    }
-
     public function obtenirHotelParId($id_hotel)
     {
         $sql = "SELECT * FROM hotels WHERE id = :id_hotel";
@@ -62,5 +53,15 @@ class Hotel
         $stmt->bindParam(':id_hotel', $id_hotel, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    /* cette fonction retoune le non bbre de canchambr dun hotel en fontion de son id */
+    public function getNombreChambres($id_hotel)
+    {
+        $sql = "SELECT nombre_chambres FROM hotels WHERE id = :id_hotel";
+        $stmt = $this->connexion->prepare($sql);
+        $stmt->bindParam(':id_hotel', $id_hotel, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchColumn(); // Retourne directement le nombre
     }
 }
