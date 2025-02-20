@@ -5,6 +5,7 @@
 <h2>Ajouter un Hôtel</h2>
 
 <form action="../../controllers/HotelController.php" method="POST" enctype="multipart/form-data">
+
     <label for="nom">Nom :</label>
     <input type="text" id="nom" name="nom" required><br>
 
@@ -17,7 +18,10 @@
     <label for="description">Description :</label>
     <textarea id="description" name="description"></textarea><br>
 
-    <label for="photo">Photo :</label>
+    <label for="nombre_de_chambre">Nombre de chambre:</label>
+    <input type="number" id="nombre_de_chambre" name="nombre_de_chambre"><br>
+
+    <label for=" photo">Photo :</label>
     <input type="file" id="photo" name="photo" accept="image/*"><br>
 
     <!-- Ajout du champ caché pour éviter l'erreur -->

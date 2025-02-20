@@ -32,6 +32,7 @@ require_once __DIR__ . '/../config/configuration.php';
                 <li><a href="<?php echo BASE_URL . 'views/entreprise/formulaire_connexion_entr.php'; ?>">Connexion Entreprise</a></li>
                 <li><a href="<?php echo BASE_URL . 'views/entreprise/formulaire_ajouter_hotel.php'; ?>">Ajouter un hôtel</a></li>
                 <li><a href="<?php echo BASE_URL . 'views/entreprise/formulaire_ajouter_chambre.php'; ?>">Ajouter une chambre</a></li>
+                <li><a href="<?php echo BASE_URL . 'views/entreprise/liste_chambres.php'; ?>">liste chambre</a></li>
             </ul>
         </nav>
 

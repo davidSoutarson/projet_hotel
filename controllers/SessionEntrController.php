@@ -100,6 +100,11 @@ class SessionEntrController
 
         return $_SESSION['entreprise']['id'] ?? null;
     }
+
+    public static function getHotelId()
+    {
+        return $_SESSION['id_hotel'] ?? null;
+    }
 }
 
 // Gestion de l'action "deconnexion"

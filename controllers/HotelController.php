@@ -11,7 +11,7 @@ class HotelController
         $this->hotelModel = new Hotel();
     }
 
-    public function ajouterHotel($nomHotel, $adresseHotel, $telephoneHotel, $description_hotel, $photoHotel, $id_entreprise)
+    public function ajouterHotel($nomHotel, $adresseHotel, $telephoneHotel, $description_hotel, $nombre_chambre, $photoHotel, $id_entreprise)
     {
         if (!SessionEntrController::verifierSession()) {
             header('Location: ../views/entreprise/formulaire_connexion_entr.php?erreur=non_connecte');
@@ -23,7 +23,10 @@ class HotelController
             exit();
         }
 
-        $idHotel = $this->hotelModel->ajouterHotel($nomHotel, $adresseHotel, $telephoneHotel, $description_hotel, $photoHotel, $id_entreprise);
+        // Conversion de nombre_chambre en entier, avec gestion des valeurs vides
+        $nombre_chambre = is_numeric($nombre_chambre) ? (int) $nombre_chambre : null;
+
+        $idHotel = $this->hotelModel->ajouterHotel($nomHotel, $adresseHotel, $telephoneHotel, $description_hotel, $nombre_chambre, $photoHotel, $id_entreprise);
 
         if ($idHotel) {
             header("Location: ../views/entreprise/formulaire_ajouter_chambre.php?hotel=$idHotel&success=hotel_ajoute");
@@ -33,14 +36,17 @@ class HotelController
         exit();
     }
 
-    /**
-     * Cette méthode récupère tous les hôtels à partir du modèle Hotel
-     *
-     * @return array Liste des hôtels
-     */
     public function obtenirTousLesHotels()
     {
-        return $this->hotelModel->obtenirHotels(); // Appelle la méthode obtenirHotels() du modèle Hotel
+        return $this->hotelModel->obtenirHotels();
+    }
+
+    public function obtenirNombreDeChambres($id_hotel)
+    {
+        require_once __DIR__ . '/../models/Hotel.php';
+        $hotelModel = new Hotel();
+
+        return $hotelModel->getNombreChambres($id_hotel);
     }
 }
 
@@ -52,6 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     $adresse = trim($_POST['adresse'] ?? '');
     $telephone = trim($_POST['telephone'] ?? '');
     $description_hotel = trim($_POST['description'] ?? '');
+    $nombre_chambre = trim($_POST['nombre_de_chambre'] ?? '');
     $photo = $_FILES['photo']['name'] ?? '';
 
     // Récupération de l'ID de l'entreprise connectée
@@ -62,17 +69,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     }
 
     if ($photo && $_FILES['photo']['tmp_name']) {
-        $uploadDir = __DIR__ . '/../uploads/'; // Le répertoire d'uploads
+        $uploadDir = __DIR__ . '/../uploads/';
         if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
 
         $extension = pathinfo($photo, PATHINFO_EXTENSION);
         $photoName = uniqid('hotel_') . '.' . $extension;
-        $uploadFile = 'uploads/' . $photoName; // Utilisation d'un chemin relatif
+        $uploadFile = 'uploads/' . $photoName;
 
-        // Déplacer l'image dans le répertoire 'uploads'
         if (move_uploaded_file($_FILES['photo']['tmp_name'], __DIR__ . '/../uploads/' . $photoName)) {
-            // Passe le chemin relatif de l'image à la méthode ajouterHotel
-            $hotelController->ajouterHotel($nom, $adresse, $telephone, $description_hotel, $uploadFile, $id_entreprise);
+            // Enregistrer l'hôtel avec nombre_chambre converti en entier ou NULL
+            $hotelController->ajouterHotel($nom, $adresse, $telephone, $description_hotel, $nombre_chambre, $uploadFile, $id_entreprise);
         } else {
             header('Location: ../views/entreprise/formulaire_ajouter_hotel.php?erreur=echec_upload');
             exit();

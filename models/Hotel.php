@@ -19,16 +19,17 @@ class Hotel
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function ajouterHotel($nomHotel, $adresseHotel, $telephoneHotel, $description_hotel, $photoHotel, $id_entreprise)
+    public function ajouterHotel($nomHotel, $adresseHotel, $telephoneHotel, $description_hotel, $nombre_chambre, $photoHotel, $id_entreprise)
     {
-        $requete = "INSERT INTO " . $this->table . " (nom, adresse, telephone, description_hotel, photo_hotel, id_entreprise) 
-                VALUES (:nom, :adresse, :telephone, :description_hotel, :photo_hotel, :id_entreprise)";
+        $requete = "INSERT INTO " . $this->table . " (nom, adresse, telephone, description_hotel, nombre_chambre, photo_hotel, id_entreprise) 
+                VALUES (:nom, :adresse, :telephone, :description_hotel,:nombre_chambre, :photo_hotel, :id_entreprise)";
 
         $stmt = $this->connexion->prepare($requete);
         $stmt->bindParam(':nom', $nomHotel);
         $stmt->bindParam(':adresse', $adresseHotel);
         $stmt->bindParam(':telephone', $telephoneHotel);
         $stmt->bindParam(':description_hotel', $description_hotel); // Correction du paramètre
+        $stmt->bindParam(':nombre_chambre', $nombre_chambre); // Correction du paramètre
         $stmt->bindParam(':photo_hotel', $photoHotel); // Correction du paramètre
         $stmt->bindParam(':id_entreprise', $id_entreprise);
 
@@ -42,5 +43,23 @@ class Hotel
     public function recupererDernierId()
     {
         return $this->connexion->lastInsertId();
+    }
+
+    public function getNombreChambres($id_hotel)
+    {
+        $sql = "SELECT nombre_chambre FROM hotels WHERE id = :id_hotel";
+        $stmt = $this->connexion->prepare($sql);
+        $stmt->bindParam(':id_hotel', $id_hotel, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchColumn(); // Retourne directement le nombre
+    }
+
+    public function obtenirHotelParId($id_hotel)
+    {
+        $sql = "SELECT * FROM hotels WHERE id = :id_hotel";
+        $stmt = $this->connexion->prepare($sql);
+        $stmt->bindParam(':id_hotel', $id_hotel, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 }
