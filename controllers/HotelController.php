@@ -53,7 +53,7 @@ class HotelController
     {
         return $this->hotelModel->obtenirHotels();
     }
-
+    /* a verifier */
     public function obtenirNombreDeChambres($id_hotel)
     {
         return $this->hotelModel->getNombreChambres($id_hotel);
@@ -83,7 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     $adresse = trim($_POST['adresse'] ?? '');
     $telephone = trim($_POST['telephone'] ?? '');
     $description_hotel = trim($_POST['description'] ?? '');
-    $nombre_chambre = trim($_POST['nombre_de_chambre'] ?? '');
+    $nombre_chambres = trim($_POST['nombre_chambres'] ?? '');
     $photo = $_FILES['photo']['name'] ?? '';
 
     // Vérifier l'ID de l'entreprise connectée

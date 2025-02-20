@@ -26,7 +26,7 @@ var_dump($hotels); */
 
 // Vérifier si un hôtel a été sélectionné
 $id_hotel = isset($_POST['id_hotel']) ? (int) $_POST['id_hotel'] : 0;
-$nombre_de_chambres = 0;
+$nombre_de_chambres = 0;/* ? */
 
 echo "id_hotel=" . $id_hotel . "</br>";
 

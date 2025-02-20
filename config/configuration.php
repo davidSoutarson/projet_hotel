@@ -34,6 +34,7 @@ define('CSS_PATH', BASE_URL . 'css/');
 define('MODEL_PATH', BASE_PATH . 'models' . DIRECTORY_SEPARATOR);
 define('CONTROLLER_PATH', BASE_PATH . 'controllers' . DIRECTORY_SEPARATOR);
 define('VIEWS_PATH', BASE_PATH . 'views' . DIRECTORY_SEPARATOR);
+define('UPLOADS_PATH', BASE_PATH . 'uploads' . DIRECTORY_SEPARATOR);
 
 //define('UTLISATEUR_PATH', VIEWS_PATH . 'fomulaire_incription' . DIRECTORY_SEPARATOR);
 

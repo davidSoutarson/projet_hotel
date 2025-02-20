@@ -46,8 +46,8 @@ class SessionEntrController
         unset($_SESSION['entreprise']);
 
         // Pour détruire complètement la session, décommenter les lignes suivantes :
-        // session_unset();
-        // session_destroy();
+        session_unset();
+        session_destroy();
 
         // Supprime également le cookie de session si présent
         if (ini_get("session.use_cookies")) {
