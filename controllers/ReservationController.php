@@ -1,6 +1,10 @@
 <?php
 require_once '../models/Reservation.php';
 
+echo "<pre>";
+var_dump($_POST);
+echo "</pre>";
+
 class ReservationController
 {
     private $reservationModel;

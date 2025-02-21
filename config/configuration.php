@@ -37,5 +37,3 @@ define('VIEWS_PATH', BASE_PATH . 'views' . DIRECTORY_SEPARATOR);
 define('UPLOADS_PATH', BASE_PATH . 'uploads' . DIRECTORY_SEPARATOR);
 
 //define('UTLISATEUR_PATH', VIEWS_PATH . 'fomulaire_incription' . DIRECTORY_SEPARATOR);
-
-$configTeste = "appel du fichier config/configuration.php 01 OK";

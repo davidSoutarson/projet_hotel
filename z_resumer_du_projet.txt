@@ -4,8 +4,9 @@ projet_hotel
 
 |__config/
 |   |__configuration.php
-|   |__creation.php
+|   |__creation_database.php
 |__controllers/
+|   |__ChambreController.php
 |   |__connexionEntrController.php
 |   |__connexionUtilController.php
 |   |__EntrepriseController.php
@@ -17,6 +18,7 @@ projet_hotel
 |__css/
 |   |__style.css
 |__images/
+    default_hotel.jpg
 |__log/
 |__models/
 |   |__Chambre.php
@@ -25,12 +27,19 @@ projet_hotel
 |   |__Reservation.php
 |   |__Utilisateur.php
 |__uploads/
+|   |__chambre_xxxxxx.jpg
+|   |__chambre_xxxxxx.jpg
+|   |__chambre_xxxxxx.jpg
+|   |__hotel_xxxxxx.jpg
+|   |__hotel_xxxxxx.jpg
+|   |__hotel_xxxxxx.jpg
 |__views/
 |   |__entreprise/
 |   |   |__formulaire_ajouter_chambre.php
 |   |   |__formulaire_ajouter_hotel.php
 |   |   |__formulaire_connexion_entr.php
 |   |   |__formulaire_inscription_entr.php
+|   |   |__liste_chambres.php
 |   |__hotel/
 |   |   |__liste_hotels.php
 |   |__utilisateur/
@@ -40,8 +49,87 @@ projet_hotel
 |   |__footer.php
 |   |__footer.php
 |__index.php
+-----------------------------------------------------------------------------
+Description et fontion des diferant fichier
 
+ docier: config/
+    configuration.php 
+Que fait le fichier configuration.php ?
+Le fichier configuration.php sert à configurer les paramètres essentiels du projet.
 
+1 Connexion à la base de données :
+    - Il définit une classe Database qui permet d'établir une connexion avec une base de données MySQL via PDO.
+    - Il utilise les paramètres suivants :
+        Hôte (localhost)
+        Nom de la base de données (hotel_database)
+        Utilisateur (root)
+        Mot de passe (vide par défaut)
+    - Il active le mode d'affichage des erreurs avec PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION
+
+2 Définition des constantes pour les chemins du projet :
+
+    BASE_URL : URL de base du projet (http://localhost/projet_hotel/).
+    BASE_PATH : Chemin absolu du projet sur le serveur.
+    CSS_PATH : Chemin vers le dossier des fichiers CSS.
+    MODEL_PATH, CONTROLLER_PATH, VIEWS_PATH, UPLOADS_PATH : 
+    Définition des chemins pour les modèles, contrôleurs, vues et téléchargements.
+
+Utilité du fichier :
+Ce fichier est crucial pour la configuration du projet, car il :
+
+Centralise la connexion à la base de données.
+Définit des constantes facilitant l'accès aux fichiers du projet.
+Simplifie la gestion des chemins pour éviter les erreurs de navigation.
+
+En résumé, c'est un fichier fondamental pour le bon fonctionnement du projet,
+garantissant une connexion à la base de données et un accès structuré aux fichiers.
+
+...   ...   ...   ...   ...   ...   ...   ... fin de fichier  ...   ...   ...   ...   ...   ...   ...   ...   ... 
+
+ docier: config/
+    creation_database.php
+ Que fait le fichier creation_database.php?
+ Le fichier creation_database.php sert à créer la base de données et ses tables pour un système de gestion d'hôtel.
+
+ 1. Connexion au serveur MySQL
+ Il établit une connexion à MySQL en utilisant localhost avec l'utilisateur root et sans mot de passe.
+ Il active le mode d'affichage des erreurs pour détecter facilement les problèmes (PDO::ERRMODE_EXCEPTION) 
+
+ 2. Création de la base de données
+ Il crée la base de données hotel_database si elle n'existe pas déjà.
+ Il définit l'encodage en UTF-8 pour supporter les caractères spéciaux.
+ Il sélectionne la base de données nouvellement créée pour y exécuter les requêtes suivantes.
+
+ 3. Création des tables : utilisateurs, entreprises, hotels, chambres, reservations 
+
+ utilisateurs:
+    Stocke les informations des utilisateurs (nom, prénom, adresse, téléphone, email unique, mot de passe).
+    Clé primaire id avec auto-incrémentation
+ 
+ entreprises:
+    Stocke les entreprises qui possèdent les hôtels.
+    Clé primaire id avec auto-incrémentation.
+
+ hotels,
+    Contient les hôtels avec leurs informations (nom, adresse, description, nombre de chambres, photo).
+    Clé primaire id avec auto-incrémentation.
+    Chaque hôtel est lié à une entreprise par: id_entreprise
+
+ chambres:
+    Stocke les informations des chambres : numéro, prix, nombre de lits, description, état (libre ou réservé).
+    Clé primaire id avec auto-incrémentation.
+    Chaque chambre est liée à un hôtel via id_hotel
+    
+ reservations
+
+ Le fichier creation_database.php est utilisé pour : Créer la base de données hotel_database si elle n'existe pas.
+ Définir les tables essentielles (utilisateurs, entreprises, hôtels, chambres, réservations).
+ Gérer les relations entre les différentes entités grâce aux clés étrangères.
+ Assurer que le tout fonctionne correctement grâce à la gestion des erreurs.
+
+Ce script est souvent exécuté une seule fois au démarrage du projet pour initialiser la base de données.
+
+------------------------------------------------------------------------------
  Amélioration url
  Méthode simple : index.php?page=... permet d'afficher dynamiquement des pages.
  
