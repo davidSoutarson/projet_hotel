@@ -120,7 +120,16 @@ garantissant une connexion à la base de données et un accès structuré aux fi
     Clé primaire id avec auto-incrémentation.
     Chaque chambre est liée à un hôtel via id_hotel
     
- reservations
+ reservations:
+    Contient les réservations faites par les utilisateurs.
+    calculée automatiquement la dure dune resevation.
+    Chaque réservation est associée à :
+    Un utilisateur (id_utilisateur).
+    Une chambre (id_chambre).
+
+$trigger
+    Ajout d’un trigger (avant_insertion_reservation) pour empêcher la double réservation d’une chambre 
+    sur une même période. Si une réservation en conflit est détectée, elle est refusée avec un message d’erreur
 
  Le fichier creation_database.php est utilisé pour : Créer la base de données hotel_database si elle n'existe pas.
  Définir les tables essentielles (utilisateurs, entreprises, hôtels, chambres, réservations).
@@ -128,6 +137,10 @@ garantissant une connexion à la base de données et un accès structuré aux fi
  Assurer que le tout fonctionne correctement grâce à la gestion des erreurs.
 
 Ce script est souvent exécuté une seule fois au démarrage du projet pour initialiser la base de données.
+
+...   ...   ...   ...   ...   ...   ...   ... fin de fichier  ...   ...   ...   ...   ...   ...   ...   ...   ...
+
+
 
 ------------------------------------------------------------------------------
  Amélioration url
