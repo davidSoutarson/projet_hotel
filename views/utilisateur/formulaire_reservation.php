@@ -35,7 +35,7 @@
     <label for="date_depart">Date de départ :</label>
     <input type="date" id="date_depart" name="date_depart" required><br>
 
-    <button type="submit">Réserver</button>
+    <button class="btn" type="submit">Réserver</button>
 </form>
 
 <?php

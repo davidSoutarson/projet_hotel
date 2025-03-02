@@ -26,10 +26,10 @@ $hotels = $hotelController->obtenirTousLesHotels();
                 <p>Prix : <?= htmlspecialchars($prix_min) ?>€ à <?= htmlspecialchars($prix_max) ?>€</p>
 
                 <!-- Bouton de sélection via un formulaire POST-->
-                <form action="/projet_hotel/controllers/ReservationController.php" method="POST">
+                <form class="fon-tansparent" action="/projet_hotel/controllers/ReservationController.php" method="POST">
                     <input type="hidden" name="action" value="selection_hotel">
                     <input type="hidden" name="id_hotel" value="<?= htmlspecialchars($hotel['id']) ?>">
-                    <button type="submit">Sélectionner cet hôtel</button>
+                    <button class="btn" type="submit">Sélectionner cet hôtel</button>
                 </form>
             </div>
         <?php endforeach; ?>

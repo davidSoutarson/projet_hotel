@@ -3,6 +3,7 @@
   margin: 0;
   padding: 0;
   list-style-type: none;
+  text-decoration: none;
   border-collapse: collapse;
 }
 
@@ -25,12 +26,16 @@ nav ul {
 li {
   list-style-type: none;
   margin: 5px;
-  border: solid 2px white;
+  padding: 5px;
+  text-align: center;
 }
 nav a {
+  border: solid 2px white;
+  border-radius: 30px;
   color: darkblue;
   text-decoration: none;
-  margin: 5px;
+  padding: 10px;
+  display: block;
 }
 nav a:hover {
   color: lightblue;
@@ -56,11 +61,50 @@ h3 {
 
 form {
   margin: auto;
+  display: flex;
+  flex-direction: column;
   background-color: #d3d3d3;
   padding: 20px;
   border-radius: 5px;
   width: 70%;
 }
+
+.mTop-5 {
+  margin-top: 5px;
+}
+
+.form-boxe {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 10px;
+  padding-left: 10px;
+  border-left: 2px solid rgba(54, 52, 52, 0.698);
+  border-bottom: 2px solid rgb(34, 33, 33);
+}
+
+.fon-tansparent {
+  background-color: rgba(251, 251, 251, 0);
+}
+
+.Ligne1 {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: center;
+}
+
+.Ts {
+  display: block;
+  width: 20%;
+  height: 30px;
+}
+
+.Ligne3 {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
 .grille-hotels {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -74,6 +118,7 @@ form {
 .test {
   border: 1px solid red;
   width: 70%;
+  height: 50px;
   margin: auto;
 }
 
@@ -88,4 +133,28 @@ form {
   margin: auto;
   width: 190px;
   height: 190px;
+}
+
+th,
+td {
+  text-align: center;
+  padding: 5px;
+}
+
+/* les bouton  */
+
+.btn {
+  display: inline-block;
+  border: 1px solid rgb(88, 90, 91);
+  border-radius: 30px;
+  padding: 10px;
+  margin: 5px;
+  height: auto;
+  width: auto;
+}
+
+.ajouter {
+  background-color: aquamarine;
+  color: rgb(48, 82, 157);
+  font-weight: bold;
 }

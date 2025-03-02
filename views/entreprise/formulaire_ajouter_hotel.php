@@ -36,7 +36,7 @@ if (!SessionEntrController::verifierSession()) {
     <!-- Ajout du champ caché pour éviter l'erreur -->
     <input type="hidden" name="action" value="ajouter_hotel">
 
-    <button type="submit">Ajouter Hôtel</button>
+    <button class="btn ajouter" type="submit">Ajouter Hôtel</button>
 </form>
 
 <?php require_once '../footer.php'; ?>

@@ -51,6 +51,7 @@ $chambres = $chambreModel->obtenirChambresParHotel($hotelId);
         <th>Description</th>
         <th>Photo</th>
         <th>État</th>
+        <th>Modifier</th>
     </tr>
     <?php foreach ($chambres as $chambre): ?>
         <tr>
@@ -66,10 +67,11 @@ $chambres = $chambreModel->obtenirChambresParHotel($hotelId);
                 <?php endif; ?>
             </td>
             <td><?= htmlspecialchars($chambre['etat']) ?></td>
+            <td> <a class="btn" href=" #"> modifier </a> <a class="btn" href="#"> suprimer </a> </td>
         </tr>
     <?php endforeach; ?>
 </table>
 
-<a href="formulaire_ajouter_chambre.php?hotel=<?= htmlspecialchars($hotelId) ?>">Ajouter une chambre</a>
+<a class="btn ajouter" href="formulaire_ajouter_chambre.php?hotel=<?= htmlspecialchars($hotelId) ?>">Ajouter des chambres</a>
 
 <?php require_once '../footer.php'; ?>

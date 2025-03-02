@@ -17,7 +17,7 @@
     <label for="mot_de_passe">Mot de passe :</label>
     <input type="password" id="mot_de_passe" name="mot_de_passe" required><br>
 
-    <button type="submit">S'inscrire</button>
+    <button class="btn" type="submit">S'inscrire</button>
 </form>
 
 <?php require_once '../footer.php'; ?>

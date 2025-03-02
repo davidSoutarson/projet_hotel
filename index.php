@@ -1,8 +1,8 @@
 <?php
 require_once 'config/configuration.php';
-require_once 'config/creation_database.php';
-require_once 'views/header.php';
-require_once 'controllers/HotelController.php';
+require_once CONFIG_PATH . "creation_database.php";
+require_once VIEWS_PATH . "header.php";
+require_once CONTROLLER_PATH . "HotelController.php";
 
 echo '<h2> Afiche tout les hotels </h2>';
 
@@ -14,5 +14,5 @@ $hotels = $hotelController->obtenirTousLesHotels();
 var_dump($hotels);
 echo '</pre>'; */
 
-require_once 'views/hotel/liste_hotels.php';
-require_once 'views/footer.php';
+require_once VIEWS_PATH . "hotel/liste_hotels.php";
+require_once VIEWS_PATH . "footer.php";

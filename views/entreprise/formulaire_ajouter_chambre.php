@@ -37,6 +37,7 @@ if ($id_hotel > 0) {
 <h2>Ajouter des Chambres</h2>
 
 <!-- Étape 1 : Sélection de l'hôtel -->
+
 <form action="formulaire_ajouter_chambre.php" method="POST">
     <label for="hotel">Sélectionner l'hôtel :</label>
     <select id="hotel" name="id_hotel" required onchange="this.form.submit()">
@@ -52,7 +53,8 @@ if ($id_hotel > 0) {
 
 <!-- Étape 2 : Affichage du formulaire si un hôtel est sélectionné -->
 <?php if ($id_hotel > 0) : ?>
-    <form action="../../controllers/ChambreController.php" method="POST" enctype="multipart/form-data">
+
+    <form class="mTop-5" action="../../controllers/ChambreController.php" method="POST" enctype="multipart/form-data">
         <!-- Champ caché pour l'action -->
         <input type="hidden" name="action" value="ajouter_chambre">
         <input type="hidden" name="id_hotel" value="<?= htmlspecialchars($id_hotel) ?>">
@@ -64,34 +66,42 @@ if ($id_hotel > 0) {
         $nbChambresAAjouter = $nombre_de_chambres;
         for ($i = 1; $i <= $nbChambresAAjouter; $i++) :
         ?>
-            <fieldset>
+            <fieldset class="form-boxe">
                 <legend>Chambre <?= $i ?></legend>
 
-                <label for="numero_<?= $i ?>">Numéro :</label>
-                <input type="text" id="numero_<?= $i ?>" name="numero[]" required><br>
+                <div class="Ligne1">
 
-                <label for="prix_<?= $i ?>">Prix :</label>
-                <input type="number" id="prix_<?= $i ?>" name="prix[]" required><br>
+                    <label for=" numero_<?= $i ?>">Numéro :</label>
+                    <input class="Ts" type="text" id="numero_<?= $i ?>" name="numero[]" required>
 
-                <label for="nombre_lits_<?= $i ?>">Nombre de lits :</label>
-                <input type="number" id="nombre_lits_<?= $i ?>" name="nombre_lits[]" required><br>
+                    <label for="prix_<?= $i ?>">Prix :</label>
+                    <input class="Ts" type="number" id="prix_<?= $i ?>" name="prix[]" required>
 
+                    <label for="nombre_lits_<?= $i ?>">Nombre de lits :</label>
+                    <input class="Ts" type="number" id="nombre_lits_<?= $i ?>" name="nombre_lits[]" required>
+
+                </div>
                 <label for="description_chambre_<?= $i ?>">Description :</label>
                 <textarea id="description_chambre_<?= $i ?>" name="description_chambre[]"></textarea><br>
 
-                <label for="photo_chambre_<?= $i ?>">Photo :</label>
-                <input type="file" id="photo_chambre_<?= $i ?>" name="photo_chambre[]" accept="image/*"><br>
-
-                <label for="etat_<?= $i ?>">État :</label>
-                <select id="etat_<?= $i ?>" name="etat[]">
-                    <option value="libre">Libre</option>
-                    <option value="reserve">Réservé</option>
-                </select><br>
+                <div class="Ligne3">
+                    <div class="col-1">
+                        <label for="photo_chambre_<?= $i ?>">Photo :</label>
+                        <input type="file" id="photo_chambre_<?= $i ?>" name="photo_chambre[]" accept="image/*"><br>
+                    </div>
+                    <div class="col-2">
+                        <label for="etat_<?= $i ?>">État :</label>
+                        <select id="etat_<?= $i ?>" name="etat[]">
+                            <option value="libre">Libre</option>
+                            <option value="reserve">Réservé</option>
+                        </select>
+                    </div>
+                </div>
             </fieldset>
             <br>
         <?php endfor; ?>
 
-        <button type="submit">Ajouter Chambres</button>
+        <button class="btn ajouter" type="submit">Ajouter Chambres</button>
     </form>
 <?php elseif ($id_hotel > 0) : ?>
     <p>Cet hôtel ne permet pas d'ajouter de nouvelles chambres.</p>
