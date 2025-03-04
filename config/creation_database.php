@@ -50,7 +50,7 @@ try {
         id_entreprise INT NOT NULL,
         id_ville INT NOT NULL,
         FOREIGN KEY (id_entreprise) REFERENCES entreprises(id) ON DELETE CASCADE,
-        FOREIGN KEY (id_ville') REFERENCES villes(id) ON DELETE CASCADE
+        FOREIGN KEY (id_ville) REFERENCES villes_francais(id) ON DELETE CASCADE
     );");
 
     // Table des chambres
