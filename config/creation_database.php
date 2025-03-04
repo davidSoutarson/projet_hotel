@@ -31,17 +31,26 @@ try {
         mot_de_passe VARCHAR(255) NOT NULL
     );");
 
+    //table des villes_francais
+    $connexion->exec("CREATE TABLE IF NOT EXISTS villes_francais (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        nom_ville VARCHAR(255) NOT NULL,
+        code_postal_hotel INT NOT NULL
+    );");
+
     // Table des hôtels
     $connexion->exec("CREATE TABLE IF NOT EXISTS hotels (
         id INT AUTO_INCREMENT PRIMARY KEY,
-        nom VARCHAR(255) NOT NULL,
-        adresse TEXT NOT NULL,
+        hotel_nom VARCHAR(255) NOT NULL,
+        hotel_adresse TEXT NOT NULL,
         telephone VARCHAR(20),
         description_hotel TEXT,
         nombre_chambres INT DEFAULT 0,
         photo_hotel VARCHAR(255),
         id_entreprise INT NOT NULL,
-        FOREIGN KEY (id_entreprise) REFERENCES entreprises(id) ON DELETE CASCADE
+        id_ville INT NOT NULL,
+        FOREIGN KEY (id_entreprise) REFERENCES entreprises(id) ON DELETE CASCADE,
+        FOREIGN KEY (id_ville') REFERENCES villes(id) ON DELETE CASCADE
     );");
 
     // Table des chambres

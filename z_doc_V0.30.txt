@@ -21,4 +21,133 @@ Option a jouter:
 
  - Ajouter une ville au hotelle
 
+
+Ce script récupère les données du formulaire, vérifie dans le CSV public si la ville existe avec le code
+postal indiqué,ajoute la ville dans la table villes_francais (si elle n'existe pas déjà) et enfin insère l'hôtel
+avec la clé étrangère pointant vers l'id de la ville.
+
+ Note : Adaptez les noms de base de données, utilisateurs et noms de champs selon votre configuration
+
+
+ <?php
+// Récupération des données du formulaire (depuis views/entreprise/formulaire_ajouter_hotel.php)
+$formVille        = isset($_POST['ville']) ? trim($_POST['ville']) : '';
+$formCodePostal   = isset($_POST['code_postal']) ? trim($_POST['code_postal']) : '';
+$formHotelNom     = isset($_POST['hotel_nom']) ? trim($_POST['hotel_nom']) : '';
+$formHotelAdresse = isset($_POST['hotel_adresse']) ? trim($_POST['hotel_adresse']) : '';
+
+if (empty($formVille) || empty($formCodePostal) || empty($formHotelNom) || empty($formHotelAdresse)) {
+    die("Tous les champs sont requis.");
+}
+
+// Vérifier que le code postal est composé de 5 chiffres
+if (!preg_match('/^\d{5}$/', $formCodePostal)) {
+    die("Le code postal doit être composé de 5 chiffres.");
+}
+
+// 1. Vérifier dans le CSV public si la ville et le code postal correspondent
+$url = "https://static.data.gouv.fr/resources/villes-de-france/20220928-173607/cities.csv";
+$found = false;
+
+if (($handle = fopen($url, "r")) !== false) {
+    // Ignorer la première ligne (les en-têtes)
+    $headers = fgetcsv($handle, 1000, ",");
+    
+    while (($data = fgetcsv($handle, 1000, ",")) !== false) {
+        // Selon la structure du CSV public :
+        // [1] : nom de la ville, [3] : code postal
+        $csvNom        = trim($data[1]);
+        $csvCodePostal = trim($data[3]);
+        
+        // Comparaison insensible à la casse pour le nom et vérification stricte du code postal
+        if (strcasecmp($csvNom, $formVille) === 0 && $csvCodePostal === $formCodePostal) {
+            $found = true;
+            break;
+        }
+    }
+    fclose($handle);
+} else {
+    die("Impossible d'ouvrir le fichier CSV.");
+}
+
+if (!$found) {
+    die("La ville et le code postal renseignés ne correspondent pas aux données officielles.");
+}
+
+// 2. Connexion à la base de données
+try {
+    $pdo = new PDO("mysql:host=localhost;dbname=ton_nom_de_base", "ton_utilisateur", "ton_mot_de_passe");
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $ex) {
+    die("Erreur de connexion : " . $ex->getMessage());
+}
+
+// 3. Vérifier si la ville existe déjà dans la table `villes_francais`
+$stmtCheckCity = $pdo->prepare("SELECT id FROM villes_francais WHERE nom = :nom AND code_postal = :code_postal");
+$stmtCheckCity->bindParam(':nom', $formVille);
+$stmtCheckCity->bindParam(':code_postal', $formCodePostal);
+$stmtCheckCity->execute();
+$cityId = $stmtCheckCity->fetchColumn();
+
+if (!$cityId) {
+    // Insertion de la ville dans la table `villes_francais`
+    $stmtInsertCity = $pdo->prepare("INSERT INTO villes_francais (nom, code_postal) VALUES (:nom, :code_postal)");
+    $stmtInsertCity->bindParam(':nom', $formVille);
+    $stmtInsertCity->bindParam(':code_postal', $formCodePostal);
+    
+    if ($stmtInsertCity->execute()) {
+         $cityId = $pdo->lastInsertId();
+    } else {
+         die("Erreur lors de l'insertion de la ville.");
+    }
+}
+
+// 4. Insertion dans hotels :
+// L'hôtel est ensuite inséré dans la table hotels en utilisant l'id de la ville insérée 
+// (ou existante) comme clé étrangère.
+$stmtInsertHotel = $pdo->prepare("INSERT INTO hotels (nom, adresse, ville_id) VALUES (:nom, :adresse, :ville_id)");
+$stmtInsertHotel->bindParam(':nom', $formHotelNom);
+$stmtInsertHotel->bindParam(':adresse', $formHotelAdresse);
+$stmtInsertHotel->bindParam(':ville_id', $cityId);
+
+if ($stmtInsertHotel->execute()) {
+    echo "L'hôtel et la ville ont été ajoutés avec succès.";
+} else {
+    echo "Erreur lors de l'ajout de l'hôtel.";
+}
+?>
+
+
+Explications détaillées
+    I.  Récupération et validation du formulaire :
+
+        - Les champs ville, code_postal, hotel_nom et hotel_adresse sont récupérés via $_POST et vérifiés.
+        - On s'assure que le code postal correspond bien à 5 chiffres grâce à une expression régulière.
+        
+    II. Vérification dans le CSV :
+
+        - Le script ouvre le CSV public avec fopen() (en supposant que allow_url_fopen est activé).
+        - La première ligne est ignorée, puis chaque ligne est parcourue.
+        - La ville et le code postal du CSV sont comparés aux valeurs du formulaire (la comparaison du nom est insensible à la casse).
+        - Si la correspondance est trouvée, le département est déduit (par exemple, les deux premiers chiffres du code postal) 
+        et la vérification passe.
+        
+    II. Connexion à la base de données :
+
+        -Une connexion PDO est établie avec les paramètres adaptés à votre environnement.
+    
+    IV. Insertion dans la table villes_francais :
+
+        -Le script vérifie si la ville existe déjà (basé sur le nom et le code postal).
+        -Si la ville n'existe pas, elle est insérée, et l'id généré est récupéré.
+
+    V.  Insertion dans la table hotels :
+
+        - L'hôtel est ensuite inséré en incluant le champ ville_id qui référence l'id de la ville dans la table villes_francais.
+ 
+    Cette solution garantit que seule une ville valide (présente dans le CSV et avec un code postal correct) est insérée, et que l'hôtel référencera correctement la ville via une clé étrangère.
+
+__________________________________________________________________________________________________________
+Option a jouter:
+
  - Ajouter un barre de recher des hotelle par ville  par prix 

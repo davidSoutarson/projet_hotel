@@ -1,19 +1,45 @@
-<?php require_once '../header.php'; ?>
+<?php
+require_once 'E:\laragon\www\projet_hotel\config\configuration.php';
+require_once VIEWS_PATH . 'header.php';
+require_once MODEL_PATH . 'Hotel.php';
+require_once MODEL_PATH . 'Chambre.php';
+?>
 
 <h2>Faire une Réservation</h2>
-<form action="../../controllers/ReservationController.php" method="POST">
-    <label for="hotel">Hôtel :</label>
+<form action="#" method="POST">
+
+    <p>choix de la ville</p>
+
+
+
+    <!-- je vais devoir ajouter les VILLE au fomulaire de creation d'hotel et a la basse de donner  -->
+
+
+    <label for="choixHotel">Choix hôtel. Dans la vile de: ..... </label>
 
     <!-- option "ux" amelior lexperiense utilisateur -->
-    <!-- afiche la liste des hotel diponible si acun hotel n'a était selectioner -->
-    <select id="hotel" name="hotel" required>
+    <!-- TRAVAILE EN COURS  afiche la liste des hotel diponible si acun hotel n'a était selectioner TRAVAILE EN COURS -->
+    <select id="choixHotel" name="choixHotel" required>
         <!-- Dynamique : Ajouter les options chois des diferen hotel via une boucle PHP -->
-        <option value="1">Hôtel 1</option>
-        <option value="2">Hôtel 2</option>
+        <?php
+        $hotelModel = new Hotel();
+        // Récupération du tableau des noms d'hôtels TRAVAILE EN COURS
+        $nomsHotels = $hotelModel->obtenirNomsHotels();
+        // Affichage du résultat
+        foreach ($nomsHotels as $key => $nomHotels) {
+            $n = 0;
+            $n++;
+            echo '<option value="' . $n . '">' . $nomHotels . '</option>';
+        }
+
+
+        ?>
     </select><br>
 
+    <label for="choixChambre">Choix chambre :</label>
+
     <!-- lorse qu'un hotele et selectionet afiche les chambre de cette hotele et leur prix  -->
-    <select id="hotel" name="hotel" required>
+    <select id="choixChambre" name="choixChambre" required>
         <!-- Dynamique : Ajouter les options via une boucle PHP -->
         <option value="1"> chambre 1</option>
         <option value="2"> chambre 2</option>
@@ -46,4 +72,4 @@ echo "</pre>";
 ?>
 
 <p>on en parle appré</p>
-<?php require_once '../footer.php'; ?>
+<?php require_once VIEWS_PATH . 'footer.php'; ?>

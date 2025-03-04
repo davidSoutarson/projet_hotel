@@ -1,7 +1,8 @@
 <?php
-require_once '../header.php';
-require_once '../../controllers/HotelController.php';
-require_once '../../controllers/SessionEntrController.php';
+require_once 'E:\laragon\www\projet_hotel\config\configuration.php';
+require_once VIEWS_PATH . 'header.php';
+require_once CONTROLLER_PATH . '\HotelController.php';
+require_once CONTROLLER_PATH . '\SessionEntrController.php';
 
 // Vérification de la session entreprise
 if (!SessionEntrController::verifierSession()) {
@@ -107,4 +108,4 @@ if ($id_hotel > 0) {
     <p>Cet hôtel ne permet pas d'ajouter de nouvelles chambres.</p>
 <?php endif; ?>
 
-<?php require_once '../footer.php'; ?>
+<?php require_once VIEWS_PATH . 'footer.php'; ?>

@@ -1,5 +1,7 @@
-<?php require_once '../header.php';
-require_once '../../controllers/SessionEntrController.php';
+<?php
+require_once 'E:\laragon\www\projet_hotel\config\configuration.php';
+require_once VIEWS_PATH . 'header.php';
+require_once CONTROLLER_PATH . 'SessionEntrController.php';
 
 // Vérifier si l'entreprise est connectée
 if (!SessionEntrController::verifierSession()) {
@@ -9,7 +11,8 @@ if (!SessionEntrController::verifierSession()) {
 
 ?>
 
-<p> Description pour le devoir : ce fichier permet d'ajouter un hôtel </p>
+<p> Description pour le devoir :</p>
+<p> Ce fichier permet d'ajouter un hôtel en france metropoliténe uniquement </p>
 
 <h2>Ajouter un Hôtel</h2>
 
@@ -18,11 +21,19 @@ if (!SessionEntrController::verifierSession()) {
     <label for="nom">Nom :</label>
     <input type="text" id="nom" name="nom" required><br>
 
+    <label for="ville">Ville :</label>
+    <input type="text" id="ville" name="ville" required><br>
+
+    <label for="code_postal">Code postal :</label>
+    <input type="text" id="code_postal" name="code_postal" pattern="\d{5}" maxlength="5" inputmode="numeric" required>
+    <br>
+
     <label for="adresse">Adresse :</label>
     <input type="text" id="adresse" name="adresse" required><br>
 
     <label for="telephone">Téléphone :</label>
-    <input type="text" id="telephone" name="telephone" required><br>
+    <input type="text" id="telephone" name="telephone" pattern="\d{10}" maxlength="5" inputmode="numeric" required>
+    <br>
 
     <label for="description">Description :</label>
     <textarea id="description" name="description"></textarea><br>
@@ -39,4 +50,4 @@ if (!SessionEntrController::verifierSession()) {
     <button class="btn ajouter" type="submit">Ajouter Hôtel</button>
 </form>
 
-<?php require_once '../footer.php'; ?>
+<?php require_once VIEWS_PATH . 'footer.php'; ?>

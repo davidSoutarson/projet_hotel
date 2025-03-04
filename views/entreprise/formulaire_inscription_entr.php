@@ -1,4 +1,7 @@
-<?php require_once '../header.php'; ?>
+<?php
+require_once 'E:\laragon\www\projet_hotel\config\configuration.php';
+require_once VIEWS_PATH . 'header.php';
+?>
 
 <h2>Inscription Entreprise</h2>
 <form action="../../controllers/EntrepriseController.php" method="POST">
@@ -20,4 +23,4 @@
     <button class="btn" type="submit">S'inscrire</button>
 </form>
 
-<?php require_once '../footer.php'; ?>
+<?php require_once VIEWS_PATH . 'footer.php'; ?>

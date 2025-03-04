@@ -1,4 +1,7 @@
-<?php require_once '../header.php'; ?>
+<?php
+require_once 'E:\laragon\www\projet_hotel\config\configuration.php';
+require_once VIEWS_PATH . 'header.php';
+?>
 
 <h2>Connexion Entreprise</h2>
 
@@ -15,4 +18,4 @@
     <button class="btn" type="submit">Se connecter</button>
 </form>
 
-<?php require_once '../footer.php'; ?>
+<?php require_once VIEWS_PATH . 'footer.php'; ?>

@@ -1,7 +1,9 @@
 <?php
-require_once __DIR__ . '/../../models/Chambre.php';
-require_once __DIR__ . '/../../models/Hotel.php';
-require_once __DIR__ . '/../../controllers/SessionEntrController.php';  // Vérification de la session entreprise
+require_once 'E:\laragon\www\projet_hotel\config\configuration.php';
+require_once VIEWS_PATH . 'header.php';
+require_once MODEL_PATH . 'Chambre.php';
+require_once MODEL_PATH . 'Hotel.php';
+require_once CONTROLLER_PATH . 'SessionEntrController.php';  // Vérification de la session entreprise
 
 // Vérifier si l'entreprise est connectée
 if (!SessionEntrController::verifierSession()) {
@@ -74,4 +76,4 @@ $chambres = $chambreModel->obtenirChambresParHotel($hotelId);
 
 <a class="btn ajouter" href="formulaire_ajouter_chambre.php?hotel=<?= htmlspecialchars($hotelId) ?>">Ajouter des chambres</a>
 
-<?php require_once '../footer.php'; ?>
+<?php require_once VIEWS_PATH . 'footer.php'; ?>

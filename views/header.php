@@ -19,20 +19,20 @@ require_once __DIR__ . '/../config/configuration.php';
             <p>Menu concernant les utilisateurs</p>
             <ul class="menu">
                 <li><a href="<?php echo BASE_URL . 'index.php'; ?>">Accueil</a></li>
-                <li><a href="<?php echo BASE_URL . 'views/utilisateur/formulaire_inscription_util.php'; ?>">Inscription Utilisateur</a></li>
-                <li><a href="<?php echo BASE_URL . 'views/utilisateur/formulaire_connexion_util.php'; ?>">Connexion Utilisateur</a></li>
-                <li><a href="<?php echo BASE_URL . 'views/utilisateur/formulaire_reservation.php'; ?>">Réservation</a></li>
+                <li><a href="<?php echo VIEWS_LIEN . 'utilisateur/formulaire_inscription_util.php'; ?>">Inscription Utilisateur</a></li>
+                <li><a href="<?php echo VIEWS_LIEN . 'utilisateur/formulaire_connexion_util.php'; ?>">Connexion Utilisateur</a></li>
+                <li><a href="<?php echo VIEWS_LIEN . 'utilisateur/formulaire_reservation.php'; ?>">Réservation</a></li>
             </ul>
         </nav>
 
         <nav class="entreprise">
             <p>Menu concernant les entreprises</p>
             <ul class="menu">
-                <li><a href="<?php echo BASE_URL . 'views/entreprise/formulaire_inscription_entr.php'; ?>">Inscription Entreprise</a></li>
-                <li><a href="<?php echo BASE_URL . 'views/entreprise/formulaire_connexion_entr.php'; ?>">Connexion Entreprise</a></li>
-                <li><a href="<?php echo BASE_URL . 'views/entreprise/formulaire_ajouter_hotel.php'; ?>">Ajouter un hôtel</a></li>
-                <li><a href="<?php echo BASE_URL . 'views/entreprise/formulaire_ajouter_chambre.php'; ?>">Ajouter une chambre</a></li>
-                <li><a href="<?php echo BASE_URL . 'views/entreprise/liste_chambres.php'; ?>">liste chambre</a></li>
+                <li><a href="<?php echo VIEWS_LIEN . 'entreprise/formulaire_inscription_entr.php'; ?>">Inscription Entreprise</a></li>
+                <li><a href="<?php echo VIEWS_LIEN . 'entreprise/formulaire_connexion_entr.php'; ?>">Connexion Entreprise</a></li>
+                <li><a href="<?php echo VIEWS_LIEN . 'entreprise/formulaire_ajouter_hotel.php'; ?>">Ajouter un hôtel</a></li>
+                <li><a href="<?php echo VIEWS_LIEN . 'entreprise/formulaire_ajouter_chambre.php'; ?>">Ajouter une chambre</a></li>
+                <li><a href="<?php echo VIEWS_LIEN . 'entreprise/liste_chambres.php'; ?>">liste chambre</a></li>
             </ul>
         </nav>
 
@@ -58,24 +58,23 @@ require_once __DIR__ . '/../config/configuration.php';
         </div>
         <div class="test">
 
+            <p>bonjour</p>
+
             <p>
                 <?php if (isset($configTeste)) {
-                    echo $configTeste;
+                    echo '<a href= "' . $configTeste . '" > test lien index </a>';
+                    echo '<br>';
+                    echo  $configTeste;
+                    echo '<br>';
+                    echo CSS_PATH;
+                    echo '<br>';
+                    echo CONTROLLER_PATH;
+                    echo '<br>';
+                    echo VIEWS_PATH;
                 }  ?>
             </p>
-            <p>
-                <?php if (isset($creatDBTeste)) {
-                    echo $creatDBTeste;
-                }  ?>
-            </p>
-            <p>
-                <?php if (isset($teste22)) {
-                    echo $teste22;
-                }  ?>
-            </p>
+
 
         </div>
     </header>
 </body>
-
-</html>

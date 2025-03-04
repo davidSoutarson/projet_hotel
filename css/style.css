@@ -116,9 +116,9 @@ form {
 }
 
 .test {
-  border: 1px solid red;
+  border: 2px solid red;
   width: 70%;
-  height: 50px;
+  height: auto;
   margin: auto;
 }
 
