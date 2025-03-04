@@ -20,20 +20,20 @@ class Hotel
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function ajouterHotel($nomHotel, $adresseHotel, $telephoneHotel, $description_hotel, $nombre_chambres, $photoHotel, $id_entreprise, $id_ville)
+    public function ajouterHotel($nomHotel, $adresseHotel, $telephoneHotel, $description_hotel, $nombre_chambres, $photoHotel, $id_entreprise)
     {
         $requete = "INSERT INTO " . $this->table . " (hotel_nom, hotel_adresse, telephone, description_hotel, nombre_chambres, photo_hotel, id_entreprise, :id_ville) 
                 VALUES (:hotel_nom, :hotel_adresse, :telephone, :description_hotel,:nombre_chambres, :photo_hotel, :id_entreprise, :id_ville)";
 
         $stmt = $this->connexion->prepare($requete);
-        $stmt->bindParam(':hotel_nom', $nomHotel);
-        $stmt->bindParam(':hotel_adresse', $adresseHotel);
+        $stmt->bindParam(':hotel_nom', $nomHotel); // a verifier
+        $stmt->bindParam(':hotel_adresse', $adresseHotel); //a verifier
         $stmt->bindParam(':telephone', $telephoneHotel);
         $stmt->bindParam(':description_hotel', $description_hotel);
         $stmt->bindParam(':nombre_chambres', $nombre_chambres);
         $stmt->bindParam(':photo_hotel', $photoHotel);
         $stmt->bindParam(':id_entreprise', $id_entreprise);
-        $stmt->bindParam(':id_ville', $id_ville);
+        $stmt->bindParam(':id_ville', $id_entreprise); // a vrifier
 
         if ($stmt->execute()) {
             return $this->connexion->lastInsertId(); // Retourne l'ID du dernier hôtel inséré
