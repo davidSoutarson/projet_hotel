@@ -3,6 +3,7 @@ changement darchitectur du projet ajou de fichier et chanjement de non
 projet_hotel
 
 |__config/
+|   |__config.php
 |   |__configuration.php
 |   |__creation_database.php
 |__controllers/
@@ -47,7 +48,7 @@ projet_hotel
 |   |   |__formulaire_inscription_util.php
 |   |   |__formulaire_reservation.php
 |   |__footer.php
-|   |__footer.php
+|   |__header.php
 |__index.php
 -----------------------------------------------------------------------------
 Description et fontion des diferant fichier

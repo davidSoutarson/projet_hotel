@@ -148,6 +148,18 @@ Explications détaillées
     Cette solution garantit que seule une ville valide (présente dans le CSV et avec un code postal correct) est insérée, et que l'hôtel référencera correctement la ville via une clé étrangère.
 
 __________________________________________________________________________________________________________
+Radisson Blu
+Lyon
+69003
+129 Rue Servient
+0478635500
+Le grand crayon avec une belle vue panoramique est situé à Lyon, à 300 mètres de la gare Part-Dieu a lyon
+Sale de restaurant le céleste au 31 étage et chambre de l'étage 32 a 39 
+le reste de l'édifie abrite divers entreprise et servisse financier
+20
+hotelLyon.jpg
+__________________________________________________________________________________________________________
+
 Option a jouter:
 
  - Ajouter un barre de recher des hotelle par ville  par prix 

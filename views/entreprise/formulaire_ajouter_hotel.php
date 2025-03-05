@@ -32,7 +32,7 @@ if (!SessionEntrController::verifierSession()) {
     <input type="text" id="adresse" name="adresse" required><br>
 
     <label for="telephone">Téléphone :</label>
-    <input type="text" id="telephone" name="telephone" pattern="\d{10}" maxlength="5" inputmode="numeric" required>
+    <input type="text" id="telephone" name="telephone" pattern="\d{10}" maxlength="10" inputmode="numeric" required>
     <br>
 
     <label for="description">Description :</label>

@@ -1,5 +1,5 @@
 <?php
-
+require_once __DIR__ . '/../models/ville.php';
 require_once __DIR__ . '/../models/Hotel.php';
 require_once __DIR__ . '/../controllers/SessionEntrController.php';
 require_once __DIR__ . '/../config/configuration.php'; // Ajout de la connexion à la DB
