@@ -15,18 +15,9 @@ require_once __DIR__ . '/../config/configuration.php';
 <body>
     <header>
         <h1>Bienvenue sur notre site de réservation d'hôtels</h1>
-        <nav>
-            <p>Menu concernant les utilisateurs</p>
-            <ul class="menu">
-                <li><a href="<?php echo BASE_URL . 'index.php'; ?>">Accueil</a></li>
-                <li><a href="<?php echo VIEWS_LIEN . 'utilisateur/formulaire_inscription_util.php'; ?>">Inscription Utilisateur</a></li>
-                <li><a href="<?php echo VIEWS_LIEN . 'utilisateur/formulaire_connexion_util.php'; ?>">Connexion Utilisateur</a></li>
-                <li><a href="<?php echo VIEWS_LIEN . 'utilisateur/formulaire_reservation.php'; ?>">Réservation</a></li>
-            </ul>
-        </nav>
 
-        <nav class="entreprise">
-            <p>Menu concernant les entreprises</p>
+        <nav class="nav_entreprise">
+            <p class="tire_menue">Menu concernant les entreprises</p>
             <ul class="menu">
                 <li><a href="<?php echo VIEWS_LIEN . 'entreprise/formulaire_inscription_entr.php'; ?>">Inscription Entreprise</a></li>
                 <li><a href="<?php echo VIEWS_LIEN . 'entreprise/formulaire_connexion_entr.php'; ?>">Connexion Entreprise</a></li>
@@ -36,16 +27,26 @@ require_once __DIR__ . '/../config/configuration.php';
             </ul>
         </nav>
 
+        <nav class="nav_utilisateur">
+            <p class="tire_menue">Menu concernant les utilisateurs</p>
+            <ul class="menu">
+                <li><a href="<?php echo BASE_URL . 'index.php'; ?>">Accueil</a></li>
+                <li><a href="<?php echo VIEWS_LIEN . 'utilisateur/formulaire_inscription_util.php'; ?>">Inscription Utilisateur</a></li>
+                <li><a href="<?php echo VIEWS_LIEN . 'utilisateur/formulaire_connexion_util.php'; ?>">Connexion Utilisateur</a></li>
+                <li><a href="<?php echo VIEWS_LIEN . 'utilisateur/formulaire_reservation.php'; ?>">Réservation</a></li>
+            </ul>
+        </nav>
+        <strong></strong>
         <div class="info-connexion">
             <h2>État de la connexion</h2>
             <?php
             if (isset($_SESSION['utilisateur'])) {
-                echo '<p>Compte Utilisateur : ' . htmlspecialchars($_SESSION['utilisateur']['prenom'], ENT_QUOTES, 'UTF-8')
-                    . ' ' . htmlspecialchars($_SESSION['utilisateur']['nom'], ENT_QUOTES, 'UTF-8') . '</p>';
-                echo '<button><a href="' . BASE_URL . 'controllers/SessionUtilController.php?action=deconnexion">Déconnexion utilisateur</a></button>';
+                echo '<p>Compte Utilisateur : <span class="valider">' . htmlspecialchars($_SESSION['utilisateur']['prenom'], ENT_QUOTES, 'UTF-8')
+                    . ' ' . htmlspecialchars($_SESSION['utilisateur']['nom'], ENT_QUOTES, 'UTF-8') . '</span></p>';
+                echo '<button class="exit"><a class="blanc" href="' . BASE_URL . 'controllers/SessionUtilController.php?action=deconnexion">Déconnexion utilisateur</a></button>';
             } elseif (isset($_SESSION['entreprise'])) {
                 echo '<p>Compte Entreprise : ' . htmlspecialchars($_SESSION['entreprise']['nom'], ENT_QUOTES, 'UTF-8') . '</p>';
-                echo '<button><a href="' . BASE_URL . 'controllers/SessionEntrController.php?action=deconnexion">Déconnexion entreprise</a></button>';
+                echo '<button class="exit"> <a class="blanc" href="' . BASE_URL . 'controllers/SessionEntrController.php?action=deconnexion">Déconnexion entreprise</a></button>';
             } else {
                 echo '<p>Vous n\'êtes pas connecté.</p>';
             }
@@ -56,25 +57,6 @@ require_once __DIR__ . '/../config/configuration.php';
             }
             ?>
         </div>
-        <div class="test">
 
-            <p>bonjour</p>
-
-            <p>
-                <?php if (isset($configTeste)) {
-                    echo '<a href= "' . $configTeste . '" > test lien index </a>';
-                    echo '<br>';
-                    echo  $configTeste;
-                    echo '<br>';
-                    echo CSS_PATH;
-                    echo '<br>';
-                    echo CONTROLLER_PATH;
-                    echo '<br>';
-                    echo VIEWS_PATH;
-                }  ?>
-            </p>
-
-
-        </div>
     </header>
 </body>

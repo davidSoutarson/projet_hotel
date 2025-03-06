@@ -12,13 +12,36 @@ body {
 }
 header {
   width: 100%;
+  min-width: 732px;
   background-color: #1f85ec;
+  display: block;
 }
 nav {
-  width: 80%;
+  max-width: 70%;
+  min-width: 600px;
   margin: auto;
   border: 2px solid yellow;
+  border-radius: 30px;
 }
+
+.nav_entreprise {
+  /*  margin-right: 20%; */
+  margin-bottom: 15px;
+  margin-top: 15px;
+  background-color: #69abee;
+}
+
+.nav_utilisateur {
+  background-color: #69abee;
+}
+
+.tire_menue {
+  margin-top: 10px;
+  margin-left: 15px;
+  color: rgb(234, 234, 241);
+  font-weight: bold;
+}
+
 nav ul {
   display: flex;
 }
@@ -52,11 +75,33 @@ footer {
 }
 h1 {
   color: white;
+  margin-right: 15px;
 }
 
 h2,
 h3 {
   color: blue;
+}
+
+.valider {
+  color: chartreuse;
+}
+
+.blanc {
+  color: #ccc;
+}
+
+.exit {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border: solid 2px rgb(229, 232, 193);
+  background: darkgreen;
+  border-radius: 30px;
+  color: rgb(252, 252, 252);
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 10px;
+  display: block;
 }
 
 form {

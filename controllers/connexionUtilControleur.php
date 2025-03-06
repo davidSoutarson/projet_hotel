@@ -52,7 +52,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 );
                 $_SESSION['success'] = "Connexion utilisateur  réussie.";
                 // Redirection vers la page d'accueil. Utilisez BASE_URL si elle est définie.
-                $teste22 = "Sa marche";
                 header('Location: ../index.php');
 
                 exit();
