@@ -26,6 +26,9 @@ require_once MODEL_PATH . 'Chambre.php';
         // Récupération du tableau des noms d'hôtels TRAVAILE EN COURS
         $nomsHotels = $hotelModel->obtenirNomsHotels();
         // Affichage du résultat
+
+        var_dump($nomsHotels);
+
         foreach ($nomsHotels as $key => $nomHotels) {
             $n = 0;
             $n++;

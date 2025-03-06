@@ -12,7 +12,7 @@ $hotels = $hotelController->obtenirTousLesHotels();
             $prix_max = $hotelController->obtenirPrixMax($hotel['id']);
         ?>
             <div class="vignette-hotel" onclick="selectionnerHotel(<?= htmlspecialchars($hotel['id']) ?>)">
-                <h2><?= htmlspecialchars($hotel['nom']) ?></h2>
+                <h2><?= htmlspecialchars($hotel['hotel_nom']) ?></h2>
 
                 <!-- Affichage de l'image de l'hôtel avec image par défaut si aucune image n'existe -->
                 <div class="boite_image_hotel">
@@ -20,9 +20,11 @@ $hotels = $hotelController->obtenirTousLesHotels();
                 </div>
 
                 <!-- Informations sur l'hôtel -->
-                <p><?= htmlspecialchars($hotel['adresse']) ?></p>
+                <p><?= htmlspecialchars($hotel['hotel_adresse']) ?></p>
                 <p><?= htmlspecialchars($hotel['telephone']) ?></p>
+                </br>
                 <p><?= htmlspecialchars($hotel['description_hotel']) ?></p>
+                </br>
                 <p>Prix : <?= htmlspecialchars($prix_min) ?>€ à <?= htmlspecialchars($prix_max) ?>€</p>
 
                 <!-- Bouton de sélection via un formulaire POST-->

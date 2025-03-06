@@ -22,7 +22,7 @@ class Hotel
 
     public function ajouterHotel($nomHotel, $adresseHotel, $telephoneHotel, $description_hotel, $nombre_chambres, $photoHotel, $id_entreprise, $id_ville)
     {
-        $requete = "INSERT INTO " . $this->table . " (hotel_nom, hotel_adresse, telephone, description_hotel, nombre_chambres, photo_hotel, id_entreprise, :id_ville) 
+        $requete = "INSERT INTO " . $this->table . " (hotel_nom, hotel_adresse, telephone, description_hotel, nombre_chambres, photo_hotel, id_entreprise, id_ville) 
                 VALUES (:hotel_nom, :hotel_adresse, :telephone, :description_hotel,:nombre_chambres, :photo_hotel, :id_entreprise, :id_ville)";
 
         $stmt = $this->connexion->prepare($requete);
@@ -49,17 +49,17 @@ class Hotel
 
     public function obtenirHotelParId($id_hotel)
     {
-        $sql = "SELECT * FROM hotels WHERE id = :id_hotel";
+        $sql = "SELECT * FROM " . $this->table . " WHERE id = :id_hotel";
         $stmt = $this->connexion->prepare($sql);
         $stmt->bindParam(':id_hotel', $id_hotel, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    /* cette fonction retoune le non bbre de canchambr dun hotel en fontion de son id */
+    /* cette fonction retoune le nombre de chambre dun hotel en fontion de son id */
     public function getNombreChambres($id_hotel)
     {
-        $sql = "SELECT nombre_chambres FROM hotels WHERE id = :id_hotel";
+        $sql = "SELECT nombre_chambres FROM " . $this->table . " WHERE id = :id_hotel";
         $stmt = $this->connexion->prepare($sql);
         $stmt->bindParam(':id_hotel', $id_hotel, PDO::PARAM_INT);
         $stmt->execute();
@@ -69,7 +69,7 @@ class Hotel
     /*le nom de chaque hôtel présent dans la base de données.*/
     public function obtenirNomsHotels()
     {
-        $requete = "SELECT nom FROM " . $this->table;
+        $requete = "SELECT hotel_nom FROM " . $this->table;
         $stmt = $this->connexion->prepare($requete);
         $stmt->execute();
         // Retourne un tableau contenant uniquement les valeurs de la colonne 'nom'

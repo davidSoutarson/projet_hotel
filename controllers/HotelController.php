@@ -10,17 +10,24 @@ class HotelController
 {
     private $hotelModel;
     private $connexion;
+    private $villeModel;
 
     public function __construct()
     {
         $this->hotelModel = new Hotel();
+        $this->villeModel = new Ville();
 
         // Initialisation de la connexion à la DB
         $database = new Database();
         $this->connexion = $database->obtenirConnexion();
     }
 
-    public function ajouterHotel($nomHotel, $adresseHotel, $telephoneHotel, $description_hotel, $nombre_chambres, $photoHotel, $id_entreprise)
+    /**
+     * Ajoute un hôtel en vérifiant et en insérant la ville si nécessaire.
+     * Les paramètres $nomHotel, $adresseHotel, $telephoneHotel, etc. sont issus du formulaire.
+     * On attend également $ville et $codePostal pour la gestion de la ville.
+     */
+    public function ajouterHotel($nomHotel, $adresseHotel, $telephoneHotel, $description_hotel, $nombre_chambres, $photoHotel, $id_entreprise, $ville, $codePostal)
     {
         // Vérification de la session de l'entreprise
         if (!SessionEntrController::verifierSession()) {
@@ -29,16 +36,62 @@ class HotelController
         }
 
         // Vérification des données manquantes
-        if (empty($nomHotel) || empty($adresseHotel) || empty($telephoneHotel) || empty($photoHotel)) {
+        if (empty($nomHotel) || empty($adresseHotel) || empty($telephoneHotel) || empty($photoHotel) || empty($ville) || empty($codePostal)) {
             header('Location: ../views/entreprise/formulaire_ajouter_hotel.php?erreur=donnees_manquantes');
             exit();
         }
 
-        // Assurer que le nombre de chambres est un entier valide
-        $nombre_chambres = is_numeric($nombre_chambres) ? (int) $nombre_chambres : null;
+        // Vérifier que le code postal est composé de 5 chiffres
+        if (!preg_match('/^\d{5}$/', $codePostal)) {
+            header('Location: ../views/entreprise/formulaire_ajouter_hotel.php?erreur=code_postal_invalide');
+            exit();
+        }
 
-        // Ajout de l'hôtel dans la base de données
-        $idHotel = $this->hotelModel->ajouterHotel($nomHotel, $adresseHotel, $telephoneHotel, $description_hotel, $nombre_chambres, $photoHotel, $id_entreprise);
+        // Vérification de la ville dans le CSV public peut être faite ici si souhaité
+        // Vérification dans le CSV public si la ville et le code postal sont valides
+        $url = "https://static.data.gouv.fr/resources/villes-de-france/20220928-173607/cities.csv";
+        $found = false;
+
+        if (($handle = fopen($url, "r")) !== false) {
+            // Ignorer la première ligne (les en-têtes)
+            $headers = fgetcsv($handle, 39145, ",");
+
+            // Parcourir chaque ligne du CSV
+            while (($data = fgetcsv($handle, 39145, ",")) !== false) {
+                // Selon la structure du CSV :
+                // [1] correspond au nom de la ville et [3] au code postal
+                $csvNom = trim($data[1]);
+                $csvCodePostal = trim($data[2]);
+
+                // Comparaison insensible à la casse pour le nom et vérification stricte du code postal
+                if (strcasecmp($csvNom, $ville) === 0 && $csvCodePostal === $codePostal) {
+                    $found = true;
+                    break;
+                }
+            }
+            fclose($handle);
+        } else {
+            header('Location: ../views/entreprise/formulaire_ajouter_hotel.php?erreur=csv_inaccessible');
+            exit();
+        }
+
+        if (!$found) {
+            header('Location: ../views/entreprise/formulaire_ajouter_hotel.php?erreur=ville_csv_non_valide');
+
+            exit();
+        }
+
+
+        // Ajout ou récupération de la ville via le modèle Ville
+        $cityId = $this->villeModel->verifierEtInsererVille($ville, $codePostal);
+        if (!$cityId) {
+            header('Location: ../views/entreprise/formulaire_ajouter_hotel.php?erreur=ville_insertion_echouee');
+            exit();
+        }
+
+        // Ajout de l'hôtel dans la base de données via le modèle Hotel
+        // La méthode ajouterHotel du modèle Hotel devra être adaptée pour inclure l'id_ville
+        $idHotel = $this->hotelModel->ajouterHotel($nomHotel, $adresseHotel, $telephoneHotel, $description_hotel, $nombre_chambres, $photoHotel, $id_entreprise, $cityId);
 
         // Si l'hôtel a été ajouté avec succès, rediriger
         if ($idHotel) {
@@ -65,7 +118,7 @@ class HotelController
             return []; // Retourne un tableau vide si l'entreprise n'est pas valide
         }
 
-        $requete = "SELECT id, nom FROM hotels WHERE id_entreprise = :id_entreprise";
+        $requete = "SELECT id, hotel_nom FROM hotels WHERE id_entreprise = :id_entreprise";
         $stmt = $this->connexion->prepare($requete); // Utilise $this->connexion ici directement
         $stmt->bindParam(':id_entreprise', $id_entreprise, PDO::PARAM_INT);
         $stmt->execute();
@@ -101,6 +154,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     $description_hotel = trim($_POST['description'] ?? '');
     $nombre_chambres = trim($_POST['nombre_chambres'] ?? '');
     $photo = $_FILES['photo']['name'] ?? '';
+    $ville = trim($_POST['ville'] ?? '');
+    $codePostal = trim($_POST['code_postal'] ?? '');
 
     // Vérifier l'ID de l'entreprise connectée
     $id_entreprise = SessionEntrController::getIdEntreprise();
@@ -122,7 +177,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         // Obtenir l'extension du fichier
         $extension = strtolower(pathinfo($photo, PATHINFO_EXTENSION));
 
-        // Vérification de l'extension et taille du fichier
+        // Vérification de l'extension et de la taille du fichier
         $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif'];
         $maxFileSize = 5 * 1024 * 1024; // 5 Mo
 
@@ -145,8 +200,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             // Sauvegarder uniquement le nom du fichier dans la base de données
             $photoPath = 'uploads/' . $photoName;
 
-            // Ajouter l'hôtel en enregistrant uniquement le chemin relatif
-            $hotelController->ajouterHotel($nom, $adresse, $telephone, $description_hotel, $nombre_chambres, $photoPath, $id_entreprise);
+            // Appeler la méthode ajouterHotel en passant les données, y compris la ville et le code postal
+            $hotelController->ajouterHotel($nom, $adresse, $telephone, $description_hotel, $nombre_chambres, $photoPath, $id_entreprise, $ville, $codePostal);
         } else {
             header('Location: ../views/entreprise/formulaire_ajouter_hotel.php?erreur=echec_upload');
             exit();
