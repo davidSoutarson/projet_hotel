@@ -1,5 +1,4 @@
 <?php
-
 $hotelController = new HotelController();
 $hotels = $hotelController->obtenirTousLesHotels();
 ?>
