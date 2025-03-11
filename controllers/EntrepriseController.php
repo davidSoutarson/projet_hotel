@@ -32,6 +32,7 @@ class EntrepriseController
 
 
         // Vérification des champs obligatoires
+        # Transformation du mot de passe en hash : $motDePasseHashe
         if (!empty($inscription_entr_nom) && !empty($inscription_entr_adresse) && !empty($inscription_entr_email) && !empty($inscription_entr_mot_de_passe)) {
             $motDePasseHashe = password_hash($inscription_entr_mot_de_passe, PASSWORD_BCRYPT);
 

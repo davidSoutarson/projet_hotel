@@ -88,4 +88,27 @@ class Chambre
         $stmt->execute();
         return (int) $stmt->fetchColumn();
     }
+
+    public function getDernierNumeroChambre($id_hotel)
+    {
+        // Préparation de la requête SQL pour récupérer le dernier numéro de chambre
+        $requete = "SELECT MAX(numero) AS dernier_numero FROM chambres WHERE id_hotel = :id_hotel";
+
+        // Préparer la requête avec PDO
+        $stmt = $this->connexion->prepare($requete);
+
+        // Lier le paramètre pour éviter les injections SQL
+        $stmt->bindParam(':id_hotel', $id_hotel, PDO::PARAM_INT);
+
+        // Exécuter la requête
+        $stmt->execute();
+
+        // Récupérer le résultat
+        $resultat = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        // Retourner le dernier numéro de chambre trouvé (ou 0 s'il n'y a aucune chambre)
+        return $resultat['dernier_numero'] ?? 0;
+    }
+
+    /** fin classe chambre */
 }

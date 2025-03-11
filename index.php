@@ -1,8 +1,20 @@
 <?php
 require_once 'config/configuration.php';
 require_once CONFIG_PATH . "creation_database.php";
+require_once MODEL_PATH . "Insert_data.php";
 require_once VIEWS_PATH . "header.php";
 require_once CONTROLLER_PATH . "HotelController.php";
+
+// Crée une instance de InsertData (qui gère sa propre connexion)
+$insertData = new InsertData();
+
+// Vérifier si l'entreprise existe déjà
+$stmt = $insertData->getConnexion()->query("SELECT COUNT(*) as total FROM entreprises WHERE email = 'contact@exemple.com'");
+$entrepriseExiste = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
+
+if ($entrepriseExiste == 0) {
+    $insertData->insererDonneesExemple();
+}
 
 echo '<h2> Afiche tout les hotels </h2>';
 

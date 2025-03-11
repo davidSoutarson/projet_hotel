@@ -234,3 +234,225 @@ if (method_exists($controller, $action)) {
 . Le routeur fonctionne avec les sessions.
 . header.php affiche la connexion en fonction de $_SESSION.
 . Les contrôleurs gèrent la connexion et la déconnexion.
+
+
+--------------------------------------------------------------
+
+voici mon formulaire d'ajout de chambre: views\entreprise\formulaire_ajouter_chambre.php
+
+<?php
+require_once __DIR__ . '/../../config/configuration.php';
+require_once VIEWS_PATH . 'header.php';
+require_once CONTROLLER_PATH . '/HotelController.php';
+require_once MODEL_PATH . '/Chambre.php';
+require_once CONTROLLER_PATH . '/SessionEntrController.php';
+
+// Vérification de la session entreprise
+if (!SessionEntrController::verifierSession()) {
+    header('Location: ../entreprise/formulaire_connexion_entr.php?erreur=non_connecte');
+    exit();
+}
+
+$id_entreprise = SessionEntrController::getEntrepriseId();
+
+$hotelController = new HotelController();
+$hotels = $hotelController->obtenirHotelsParEntreprise($id_entreprise);
+
+$id_hotel = $_POST['id_hotel'] ?? $_GET['hotel'] ?? 0;
+$id_hotel = (int)$id_hotel;
+
+$nombre_de_chambres = 0;
+if ($id_hotel > 0) {
+    $hotel_ids = array_column($hotels, 'id');
+    if (in_array($id_hotel, $hotel_ids)) {
+        $nombre_de_chambres = $hotelController->obtenirNombreDeChambres($id_hotel);
+    } else {
+        $id_hotel = 0;
+    }
+}
+?>
+
+<h2>Ajouter des Chambres</h2>
+
+<!-- Sélection de l'hôtel -->
+<form action="#" method="POST">
+    <label for="hotel">Sélectionner l'hôtel :</label>
+    <select id="hotel" name="id_hotel" required onchange="this.form.submit()">
+        <option value="">-- Choisir un hôtel --</option>
+        <?php foreach ($hotels as $hotel) : ?>
+            <option value="<?= htmlspecialchars($hotel['id']) ?>" <?= ($id_hotel == $hotel['id']) ? 'selected' : '' ?>>
+                <?= htmlspecialchars($hotel['hotel_nom']) ?>
+            </option>
+        <?php endforeach; ?>
+    </select>
+    <noscript><button type="submit">Sélectionner</button></noscript>
+</form>
+
+<?php if ($id_hotel > 0) : ?>
+
+    <?php
+    $hotel_nom = '';
+    foreach ($hotels as $hotel) {
+        if ($hotel['id'] == $id_hotel) {
+            $hotel_nom = $hotel['hotel_nom'];
+            break;
+        }
+    }
+
+    $chambre = new Chambre();
+    $chambres_deja_ajoutees = $chambre->getNombreChambres($id_hotel);
+    $dernier_numero = $chambre->getDernierNumeroChambre($id_hotel) ?? 0;
+
+    $chambres_a_ajouter = $nombre_de_chambres - $chambres_deja_ajoutees;
+
+    echo "<p> Nombre maximal de chambres autorisé pour l'hôtel : <strong>$hotel_nom</strong></p>";
+    echo "<p> Nombre maximal de chambres autorisé : $nombre_de_chambres </p>";
+    echo "<p> Nombre de chambres déjà ajoutées : $chambres_deja_ajoutees </p>";
+    echo "<p> Nombre de chambres pouvant être ajoutées : $chambres_a_ajouter </p>";
+    echo "<p> Dernier numéro de chambre : $dernier_numero </p>";
+    ?>
+
+    <?php if ($chambres_a_ajouter > 0) : ?>
+        <!-- Configuration des chambres par étage et par groupe -->
+        <form action="#" method="POST">
+            <input type="hidden" name="id_hotel" value="<?= htmlspecialchars($id_hotel) ?>">
+
+            <label for="interval">Nombre de chambres par étage :</label>
+            <select name="interval" id="interval">
+                <?php for ($i = 1; $i <= 10; $i++) : ?>
+                    <option value="<?= $i ?>"><?= $i ?> chambre<?= $i > 1 ? 's' : '' ?></option>
+                <?php endfor; ?>
+            </select>
+
+            <label for="groupe">Nombre de chambres par groupe :</label>
+            <select name="groupe" id="groupe">
+                <?php for ($i = 1; $i <= 10; $i++) : ?>
+                    <option value="<?= $i ?>"><?= $i ?> chambre<?= $i > 1 ? 's' : '' ?></option>
+                <?php endfor; ?>
+            </select>
+
+            <button type="submit">Valider</button>
+        </form>
+
+        <?php
+        $interval = $_POST['interval'] ?? 5;
+        $interval = (int)$interval;
+        ?>
+
+        <!-- Formulaire d'ajout des chambres -->
+        <form class="mTop-5" action="../../controllers/ChambreController.php" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="action" value="ajouter_chambre">
+            <input type="hidden" name="id_hotel" value="<?= htmlspecialchars($id_hotel) ?>">
+
+            <?php
+            for ($i = 1; $i <= $chambres_a_ajouter; $i++) :
+                $numero_chambre = $dernier_numero + $i;
+                $floor = floor($numero_chambre / 100); // Corrigé pour générer des numéros du type "102", "201", etc.
+                $roomNumber = sprintf("%02d", $numero_chambre % 100);
+                $value = $floor . $roomNumber;
+            ?>
+
+                <fieldset class="form-boxe">
+                    <h3>Hôtel : <?= htmlspecialchars($hotel_nom) ?></h3>
+                    <legend>Chambre <?= $numero_chambre ?></legend>
+
+                    <div class="Ligne1">
+                        <label for="numero_<?= $numero_chambre ?>">Numéro :</label>
+                        <input class="Ts" type="text" id="numero_<?= $numero_chambre ?>" value="<?= $value ?>" name="numero[]" required>
+
+                        <label for="prix_<?= $numero_chambre ?>">Prix :</label>
+                        <input class="Ts" type="number" id="prix_<?= $numero_chambre ?>" name="prix[]" step="0.01" required>
+
+                        <label for="nombre_lits_<?= $numero_chambre ?>">Nombre de lits :</label>
+                        <input class="Ts" type="number" id="nombre_lits_<?= $numero_chambre ?>" value="2" name="nombre_lits[]" required>
+                    </div>
+
+                    <label for="description_chambre_<?= $numero_chambre ?>">Description :</label>
+                    <textarea id="description_chambre_<?= $numero_chambre ?>" name="description_chambre[]"></textarea><br>
+
+                    <div class="Ligne3">
+                        <div class="col-1">
+                            <label for="photo_chambre_<?= $numero_chambre ?>">Photo :</label>
+                            <input type="file" id="photo_chambre_<?= $numero_chambre ?>" name="photo_chambre[]" accept="image/*"><br>
+                        </div>
+                        <div class="col-2">
+                            <label for="etat_<?= $numero_chambre ?>">État :</label>
+                            <select id="etat_<?= $numero_chambre ?>" name="etat[]">
+                                <option value="libre">Libre</option>
+                                <option value="reserve">Réservé</option>
+                            </select>
+                        </div>
+                    </div>
+                </fieldset>
+                <br>
+            <?php endfor; ?>
+
+            <button class="btn ajouter" type="submit">Ajouter Chambres</button>
+        </form>
+    <?php else : ?>
+        <p>Le nombre maximal de chambres pour l'hôtel <strong><?= htmlspecialchars($hotel_nom) ?></strong> a été atteint. Vous ne pouvez pas ajouter de nouvelles chambres.</p>
+    <?php endif; ?>
+
+<?php else : ?>
+    <p>Aucun hôtel sélectionné ou non valide.</p>
+<?php endif; ?>
+
+<?php require_once VIEWS_PATH . 'footer.php'; ?>
+
+fonctionnement satisfaisant :
+-1
+<form action="#" method="POST">
+    <label for="hotel">Sélectionner l'hôtel :</label>
+    <select id="hotel" name="id_hotel" required onchange="this.form.submit()">
+        <option value="">-- Choisir un hôtel --</option>
+        <?php foreach ($hotels as $hotel) : ?>
+            <option value="<?= htmlspecialchars($hotel['id']) ?>" <?= ($id_hotel == $hotel['id']) ? 'selected' : '' ?>>
+                <?= htmlspecialchars($hotel['hotel_nom']) ?>
+            </option>
+        <?php endforeach; ?>
+    </select>
+    <noscript><button type="submit">Sélectionner</button></noscript>
+</form>
+-2
+echo "<p> Nombre maximal de chambres autorisé pour l'hôtel: <strong>$hotel_nom</strong> Nonbre Max Chambres : <strong>$nombre_de_chambres</strong> </p>";
+echo "<p> Nombre de chambres déjà ajoutées : $chambres_deja_ajoutees </p>"; 
+echo "<p> Nombre de chambres pouvant être ajoutées : $chambres_a_ajouter </p>"; 
+echo "<p> Dernier numéro de chambre : $dernier_numero </p>";
+
+-3
+<input type="hidden" name="id_hotel" value="<?= htmlspecialchars($id_hotel) ?>">
+
+            <label for="interval">Nombre de chambres par étage :</label>
+            <select name="interval" id="interval">
+                <?php for ($i = 1; $i <= 10; $i++) : ?>
+                    <option value="<?= $i ?>"><?= $i ?> chambre<?= $i > 1 ? 's' : '' ?></option>
+                <?php endfor; ?>
+            </select>
+
+fonctionnement insatifesant : 
+-1 a modifier
+            <label for="groupe">Nombre de chambres par groupe :</label>
+            <select name="groupe" id="groupe">
+                <option value="1">1 chambre</option>
+                <option value="3">3 chambres</option>
+                <option value="4" selected>4 chambres</option>
+            </select>
+
+            <button type="submit">Valider</button>
+        </form> 
+
+- 1 a modifier 
+          <label for="groupe">Nombre de chambres par groupe :</label>
+            <select name="groupe" id="groupe">
+                <option value="1">1 chambre</option>
+                <option value="3">3 chambres</option>
+                <option value="4" selected>4 chambres</option>
+            </select>
+
+            <button type="submit">Valider</button>-3 a modifier
+
+Dois conditionnez le nombres repetion l'afichage du formulaire.   Ne pouraiton pas ajouter <form action="#" method="POST"> par tache ? 
+
+Les numéro affiche ca 21102 dans le cas ou des chambres on déjà été ajouter ? Ce que je veux ses 102.
+
+peut tu écrire et proposer les modification dans un fichier complet et détailler

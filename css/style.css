@@ -8,8 +8,15 @@
 }
 
 body {
+  width: 100%;
   font-family: Arial, sans-serif;
 }
+
+#warape {
+  width: 95%;
+  border: solid 1px grey;
+}
+
 header {
   width: 100%;
   min-width: 732px;
@@ -91,9 +98,9 @@ h3 {
   color: #ccc;
 }
 
+/* bouton de deconnextion entreprise et utilisateuer */
 .exit {
   margin-top: 10px;
-  margin-bottom: 10px;
   border: solid 2px rgb(229, 232, 193);
   background: darkgreen;
   border-radius: 30px;
@@ -140,10 +147,15 @@ form {
 
 .Ts {
   display: block;
-  width: 20%;
+  width: 15%;
   height: 30px;
 }
 
+.Ts2 {
+  display: block;
+  width: 5%;
+  height: 30px;
+}
 .Ligne3 {
   display: flex;
   flex-direction: row;
@@ -152,6 +164,7 @@ form {
 
 .grille-hotels {
   display: grid;
+
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 20px;
 }

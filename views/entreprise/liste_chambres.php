@@ -1,5 +1,4 @@
 <?php
-/* require_once 'E:\laragon\www\projet_hotel\config\configuration.php'; */
 require_once __DIR__ . '/../../config/configuration.php';
 require_once VIEWS_PATH . 'header.php';
 require_once MODEL_PATH . 'Chambre.php';
@@ -15,32 +14,58 @@ if (!SessionEntrController::verifierSession()) {
 // Récupérer l'ID de l'entreprise depuis la session
 $id_entreprise = SessionEntrController::getEntrepriseId();
 
+// Instancier le modèle Hotel (pour récupérer la liste des hôtels)
+$hotelModel = new Hotel();
+
 // Récupérer l'ID de l'hôtel depuis l'URL
 $hotelId = $_GET['hotel'] ?? null;
 
-// Vérifier si l'ID de l'hôtel est spécifié et si cet hôtel appartient à l'entreprise
+// Fonction de sélection de l'hôtel désiré si aucun n'est spécifié
 if (!$hotelId) {
-    die("ID d'hôtel non spécifié.");
+    // Supposons que la méthode obtenirHotelsParEntreprise retourne tous les hôtels de l'entreprise
+    $hotels = $hotelModel->obtenirHotelsParEntreprise($id_entreprise);
+
+    if (empty($hotels)) {
+        die("<p>Aucun hôtel disponible pour votre entreprise.</p>");
+    }
+?>
+    <h2>Sélectionnez l'hôtel désiré</h2>
+    <form method="get" action="">
+        <label for="hotel">Hôtel :</label>
+        <select name="hotel" id="hotel">
+            <?php foreach ($hotels as $hotel): ?>
+                <option value="<?= htmlspecialchars($hotel['id']) ?>">
+                    <?= htmlspecialchars($hotel['hotel_nom']) ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+        <button type="submit">Valider</button>
+    </form>
+<?php
+    exit();
 }
 
-// Instancier les modèles
+// Une fois l'hôtel sélectionné, on peut poursuivre le traitement
 $chambreModel = new Chambre();
-$hotelModel = new Hotel();
 
 // Vérifier si l'hôtel appartient à l'entreprise connectée
 $hotel = $hotelModel->obtenirHotelParId($hotelId);
-
 if (!$hotel || $hotel['id_entreprise'] !== $id_entreprise) {
-    die("Cet hôtel ne vous appartient pas ou il n'existe pas.");
+    die("<p>Cet hôtel ne vous appartient pas ou il n'existe pas.</p>");
 }
 
 // Obtenir les chambres pour cet hôtel
 $chambres = $chambreModel->obtenirChambresParHotel($hotelId);
+
+/* var_dump($chambres); */
+
 ?>
+
+
 
 <?php require_once '../header.php'; ?>
 
-<h2>Liste des chambres de l'hôtel : <?= htmlspecialchars($hotel['nom'] ?? 'Inconnu') ?></h2>
+<h2>Liste des chambres de l'hôtel : <?= htmlspecialchars($hotel['hotel_nom'] ?? 'Inconnu') ?></h2>
 
 <?php if (isset($_GET['success'])): ?>
     <p style="color: green;">Chambre(s) ajoutée(s) avec succès !</p>
@@ -63,14 +88,17 @@ $chambres = $chambreModel->obtenirChambresParHotel($hotelId);
             <td><?= htmlspecialchars($chambre['nombre_lits']) ?></td>
             <td><?= htmlspecialchars($chambre['description_chambre']) ?></td>
             <td>
-                <?php if (!empty($chambre['photo'])): ?>
-                    <img src="../<?= htmlspecialchars($chambre['photo']) ?>" width="100">
+                <?php if (!empty($chambre['photo_chambre'])): ?>
+                    <img src="../../<?= htmlspecialchars($chambre['photo_chambre']) ?>" width="100">
                 <?php else: ?>
                     Aucune image
                 <?php endif; ?>
             </td>
             <td><?= htmlspecialchars($chambre['etat']) ?></td>
-            <td> <a class="btn" href=" #"> modifier </a> <a class="btn" href="#"> suprimer </a> </td>
+            <td>
+                <a class="btn" href="#">modifier</a>
+                <a class="btn" href="#">supprimer</a>
+            </td>
         </tr>
     <?php endforeach; ?>
 </table>

@@ -15,10 +15,11 @@ $hotels = $hotelController->obtenirTousLesHotels();
 
                 <!-- Affichage de l'image de l'hôtel avec image par défaut si aucune image n'existe -->
                 <div class="boite_image_hotel">
-                    <img class="image_hotel" src="<?= !empty($hotel['photo_hotel']) ? htmlspecialchars($hotel['photo_hotel']) : 'images/default_hotel.jpg' ?>" alt="Photo de l'hôtel">
+                    <img class="image_hotel" src="<?= !empty($hotel['photo_hotel']) ? htmlspecialchars($hotel['photo_hotel']) : '/../../images/default_hotel.jpg' ?>" alt="Photo de l'hôtel">
                 </div>
 
                 <!-- Informations sur l'hôtel -->
+                <!-- jouter la vile si posible -->
                 <p><?= htmlspecialchars($hotel['hotel_adresse']) ?></p>
                 <p><?= htmlspecialchars($hotel['telephone']) ?></p>
                 </br>

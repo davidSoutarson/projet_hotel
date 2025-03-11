@@ -75,4 +75,13 @@ class Hotel
         // Retourne un tableau contenant uniquement les valeurs de la colonne 'nom'
         return $stmt->fetchAll(PDO::FETCH_COLUMN);
     }
+
+    public function obtenirHotelsParEntreprise($id_entreprise)
+    {
+        $sql = "SELECT * FROM " . $this->table . " WHERE id_entreprise = :id_entreprise";
+        $stmt = $this->connexion->prepare($sql);
+        $stmt->bindParam(':id_entreprise', $id_entreprise, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
