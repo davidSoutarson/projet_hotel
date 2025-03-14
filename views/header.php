@@ -35,6 +35,7 @@ require_once __DIR__ . '/../config/configuration.php';
                     <li><a href="<?php echo VIEWS_LIEN . 'utilisateur/formulaire_inscription_util.php'; ?>">Inscription Utilisateur</a></li>
                     <li><a href="<?php echo VIEWS_LIEN . 'utilisateur/formulaire_connexion_util.php'; ?>">Connexion Utilisateur</a></li>
                     <li><a href="<?php echo VIEWS_LIEN . 'utilisateur/formulaire_reservation.php'; ?>">Réservation</a></li>
+                    <li><a href="<?php echo VIEWS_LIEN . 'utilisateur/confirmation_reservation.php'; ?>">Vautre Réservation</a></li>
                 </ul>
             </nav>
             <strong></strong>

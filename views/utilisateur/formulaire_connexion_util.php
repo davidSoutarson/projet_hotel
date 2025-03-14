@@ -19,4 +19,21 @@ require_once VIEWS_PATH . 'header.php';
     <button class="btn" type="submit">Se connecter</button>
 </form>
 
-<?php require_once VIEWS_PATH . 'footer.php'; ?>
+<?php
+if (isset($_GET['erreur'])) {
+    switch ($_GET['erreur']) {
+        case 'session_expired':
+            echo "<p class='error-message'>Votre session a expiré. Veuillez vous reconnecter.</p>";
+            break;
+        case '3':
+            echo "<p class='error-message'>Erreur inconnue. Contactez l'administrateur.</p>";
+            break;
+        default:
+            echo "<p class='error-message'>Une erreur est survenue.</p>";
+    }
+}
+
+
+require_once VIEWS_PATH . 'footer.php';
+
+?>

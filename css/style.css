@@ -216,3 +216,14 @@ td {
   color: rgb(48, 82, 157);
   font-weight: bold;
 }
+
+.container {
+  background-color: #ffffff;
+  border: 2px solid #4caf50;
+  border-radius: 12px;
+  padding: 40px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  max-width: 400px;
+  width: 100%;
+}
