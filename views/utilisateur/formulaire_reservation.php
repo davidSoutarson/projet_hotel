@@ -15,9 +15,10 @@ $utilisateur = $_SESSION['utilisateur'] ?? null;
 
 // Vérification si les données utilisateur sont présentes
 if (!$utilisateur) {
-    echo "<p>Erreur : Aucune donnée utilisateur trouvée dans la session.</p>";
-    echo '<p>Vous pouvez créer votre compte <a href="' . VIEWS_LIEN . 'utilisateur/formulaire_inscription_util.php">Inscription Utilisateur</a></p>';
-    echo '<p>Ou vous connecter à votre compte <a href="' . VIEWS_LIEN . 'utilisateur/formulaire_connexion_util.php">Connexion Utilisateur</a></p>';
+    echo "<div class= 'info-boxe'> <h2> Erreur :</h2> <p> Aucune donnée utilisateur trouvée dans la session.</p>";
+    echo '<p>Vous pouvez créer votre compte <a class="btn" href="' . VIEWS_LIEN . 'utilisateur/formulaire_inscription_util.php">Inscription Utilisateur</a></p>';
+    echo '<p>Ou vous connecter à votre compte <a class="btn" href="' . VIEWS_LIEN . 'utilisateur/formulaire_connexion_util.php">Connexion Utilisateur</a></p> </div>';
+    require_once VIEWS_PATH . 'footer.php';
     exit;
 }
 

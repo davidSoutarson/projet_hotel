@@ -134,6 +134,19 @@ form {
   border-bottom: 2px solid rgb(34, 33, 33);
 }
 
+.info-boxe {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
+  background-color: rgba(255, 255, 0, 0.508);
+  width: 80%;
+  margin: 0 auto;
+  padding: 10px;
+  border: 2px solid rgb(219, 86, 24);
+}
+
 .fon-tansparent {
   background-color: rgba(251, 251, 251, 0);
 }
@@ -204,6 +217,7 @@ td {
 .btn {
   display: inline-block;
   border: 1px solid rgb(88, 90, 91);
+  background: #69abee;
   border-radius: 30px;
   padding: 10px;
   margin: 5px;
