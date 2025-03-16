@@ -1,36 +1,9 @@
-[2025-03-13 22:16:55] Début de l'ajout de réservation.
-[2025-03-13 22:16:55] Erreur : Champ manquant : idChambre
-[2025-03-13 22:19:32] Début de l'ajout de réservation.
-[2025-03-13 22:19:32] Erreur : Champ manquant : idChambre
-[2025-03-13 22:22:34] Début de l'ajout de réservation.
-[2025-03-13 22:22:34] Erreur : Champ manquant : idChambre
-[2025-03-13 22:41:43] Début de l'ajout de réservation.
-[2025-03-13 22:41:43] Erreur : Champ manquant : idChambre
-[2025-03-13 22:42:44] Début de l'ajout de réservation.
-[2025-03-13 22:42:44] Erreur : Champ manquant : idChambre
-[2025-03-13 23:04:54] Début de l'ajout de réservation.
-[2025-03-13 23:04:54] Erreur : Champ manquant : idChambre
-[2025-03-13 23:16:31] Début de l'ajout de réservation.
-[2025-03-13 23:16:31] Erreur : Champ manquant : idChambre
-[2025-03-13 23:21:22] Début de l'ajout de réservation.
-[2025-03-13 23:21:22] Erreur : Champ manquant : idChambre
-[2025-03-13 23:23:31] Début de l'ajout de réservation.
-[2025-03-13 23:23:31] Erreur : Champ manquant : idChambre
-[2025-03-13 23:46:52] Début de l'ajout de réservation.
-[2025-03-13 23:46:52] Erreur : Champ manquant : idChambre
-[2025-03-16 15:47:32] Début de l'ajout de réservation.
-[2025-03-16 15:47:32] Erreur : Champ manquant : id_hotel
-[2025-03-16 15:47:48] Début de l'ajout de réservation.
-[2025-03-16 15:47:48] Erreur : Champ manquant : id_chambre
-[2025-03-16 15:48:04] Début de l'ajout de réservation.
-[2025-03-16 15:48:04] Erreur : La date d'arrivée ne peut pas être dans le passé.
-[2025-03-16 15:48:33] Début de l'ajout de réservation.
-[2025-03-16 15:48:33] Erreur : Les dates d'arrivée et de départ sont incohérentes.
-[2025-03-16 15:48:44] Début de l'ajout de réservation.
-[2025-03-16 15:48:44] Réservation réussie pour l'utilisateur ID: 1
-[2025-03-16 16:05:18] Début de l'ajout de réservation.
-[2025-03-16 16:05:18] Erreur : Champ manquant : id_hotel
-[2025-03-16 16:05:37] Début de l'ajout de réservation.
-[2025-03-16 16:05:37] Erreur : Champ manquant : id_chambre
-[2025-03-16 16:06:01] Début de l'ajout de réservation.
-[2025-03-16 16:06:01] Réservation réussie pour l'utilisateur ID: 1
+
+[2025-03-16 16:49:18] Début de l'ajout de réservation.
+[2025-03-16 16:49:18] Erreur : Champ manquant : id_hotel
+[2025-03-16 16:49:24] Début de l'ajout de réservation.
+[2025-03-16 16:49:24] Erreur : Champ manquant : id_chambre
+[2025-03-16 17:21:08] Début de l'ajout de réservation.
+[2025-03-16 17:21:08] Réservation réussie pour l'utilisateur ID: 1
+[2025-03-16 17:33:12] Début de l'ajout de réservation.
+[2025-03-16 17:33:12] Réservation réussie pour l'utilisateur ID: 1

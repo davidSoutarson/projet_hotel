@@ -95,7 +95,7 @@ class InsertData
                        photo_chambre, etat, id_hotel
                    )
                    VALUES (
-                       101, 120.50, 2, 'Chambre double avec vue sur la ville',
+                       01, 120.50, 2, 'Chambre double avec vue sur la ville',
                        'images/default_chambre.jpg', 'libre', :idHotel
                    )
                    ON DUPLICATE KEY UPDATE

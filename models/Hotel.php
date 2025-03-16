@@ -126,11 +126,11 @@ class Hotel
     }
 
     // Récupère les hôtels d'une ville spécifique
-    public function obtenirHotelsParVille($ville)
+    public function obtenirHotelsParVille($villeId)
     {
-        $sql = "SELECT id, hotel_nom FROM " . $this->table . " WHERE ville = :ville";
+        $sql = "SELECT id, hotel_nom FROM " . $this->table . " WHERE id_ville = :villeId";
         $stmt = $this->connexion->prepare($sql);
-        $stmt->bindParam(':ville', $ville, PDO::PARAM_STR);
+        $stmt->bindParam(':villeId', $villeId, PDO::PARAM_INT);
         $stmt->execute();
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC); // Retourne les hôtels correspondant à la ville donnée
