@@ -26,14 +26,21 @@ if (!$utilisateur) {
 $nomUtilisateur = htmlspecialchars($utilisateur['nom'] ?? '', ENT_QUOTES, 'UTF-8');
 $prenomUtilisateur = htmlspecialchars($utilisateur['prenom'] ?? '', ENT_QUOTES, 'UTF-8');
 $emailUtilisateur = htmlspecialchars($utilisateur['email'] ?? '', ENT_QUOTES, 'UTF-8');
+$idUtilisateur = htmlspecialchars($utilisateur['id'] ?? '', ENT_QUOTES, 'UTF-8');
 
 // Initialisation des modèles
 $hotelModel = new Hotel();
 $chambreModel = new Chambre();
 
 //methode opention
-// Récupération des villes ####### avoir #########a vrifier ########## 1 le id des ville pose probleme
+/* Récupération  un tableau associatif contenant à la fois les ID et les noms des villes sous cette forme 
+ [
+    ["id_ville" => 1, "nom_ville" => "Paris"],
+    ["id_ville" => 2, "nom_ville" => "Lyon"],
+    ...
+] */
 $villes = $hotelModel->obtenirVilles();
+
 
 // Récupération des hotels  ####### avoir #########a vrifier ##########
 $nomsHotels = $hotelModel->obtenirNomsHotelsV2();
@@ -86,12 +93,22 @@ if (!empty($errors)) {
     }
     echo "</ul>";
 }
+
+
 ?>
 
+<?php
+// debu gage pemet de virifie que nou traiton les bonne donner
+// $villes : donnet consene les ville
+
+echo "<pre>";
+var_dump($utilisateur);
+echo "</pre>";
+?>
 <!-- Message de salutation personnalisé affiché pour l'utilisateur connecté -->
 <h2>Bonjour, <?= $prenomUtilisateur . ' ' . $nomUtilisateur; ?>, vous pouvez faire une réservation</h2>
 
-<form action="#" method="POST">
+<form action="../../controllers/ReservationController.php" method="POST">
     <h2>Faire une Réservation</h2>
 
     <!-- Cette partie recueille les dates de séjour de l'utilisateur pour la réservation -->
@@ -114,13 +131,14 @@ if (!empty($errors)) {
             <select id="choixVille" name="choixVille" onchange="this.form.submit()">
                 <option value="">-- Sélectionnez une ville --</option>
                 <?php foreach ($villes as $ville) : ?>
-                    <option value="<?= htmlspecialchars($ville, ENT_QUOTES, 'UTF-8') ?>"
-                        <?= (isset($_POST['choixVille']) && $_POST['choixVille'] === $ville) ? 'selected' : '' ?>>
-                        <?= htmlspecialchars($ville, ENT_QUOTES, 'UTF-8') ?>
+                    <option value="<?= htmlspecialchars($ville['id_ville'], ENT_QUOTES, 'UTF-8') ?>"
+                        <?= (isset($_POST['choixVille']) && $_POST['choixVille'] == $ville['id_ville']) ? 'selected' : '' ?>>
+                        <?= htmlspecialchars($ville['nom_ville'], ENT_QUOTES, 'UTF-8') ?>
                     </option>
                 <?php endforeach; ?>
             </select>
         </p><br>
+
 
         <!-- Cette partie permet de choisir un hôtel en fonction de la ville sélectionnée -->
         <p>
@@ -163,7 +181,15 @@ if (!empty($errors)) {
         <input type="email" name="email" value="<?= $emailUtilisateur ?>">
     </p>
 
+    <input type="hidden" name="id_utilisateur" value="<?= $idUtilisateur ?>">
+
     <p><button class="btn" type="submit">Confirmer les choix</button></p>
 </form>
+
+<?php
+echo "<pre>";
+var_dump($_POST);
+echo "</pre>";
+?>
 
 <?php require_once VIEWS_PATH . 'footer.php'; ?>

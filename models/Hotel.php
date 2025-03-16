@@ -97,20 +97,19 @@ class Hotel
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // Récupère la liste des villes où se trouvent les hôtels
     public function obtenirVilles()
     {
         $requete = "
-        SELECT v.nom_ville AS ville
+        SELECT v.id AS id_ville, v.nom_ville AS nom_ville
         FROM villes_francais v
         INNER JOIN hotels h ON v.id = h.id_ville
-        GROUP BY v.nom_ville
+        GROUP BY v.id, v.nom_ville
         ";
 
         $stmt = $this->connexion->prepare($requete);
         $stmt->execute();
 
-        return $stmt->fetchAll(PDO::FETCH_COLUMN); // Retourne un tableau contenant les noms des villes
+        return $stmt->fetchAll(PDO::FETCH_ASSOC); // Retourne un tableau associatif avec ID et nom des villes
     }
 
     // Récupère les hôtels avec leurs noms et les villes associées

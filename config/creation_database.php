@@ -71,6 +71,7 @@ try {
         id INT AUTO_INCREMENT PRIMARY KEY,
         date_debut DATE NOT NULL,
         date_fin DATE NOT NULL,
+        duree INT GENERATED ALWAYS AS (DATEDIFF(date_fin, date_debut)) STORED,
         id_utilisateur INT NOT NULL,
         id_chambre INT NOT NULL,
         FOREIGN KEY (id_utilisateur) REFERENCES utilisateurs(id) ON DELETE CASCADE,

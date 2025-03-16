@@ -1,9 +1,9 @@
 <?php
 session_start();
-require_once __DIR__ . '/../../config/configuration.php';
-require_once __DIR__ . '/../models/Reservation.php';
-require_once __DIR__ . '/../models/Chambre.php';
-require_once __DIR__ . '/../models/Hotel.php';
+require_once __DIR__ . '/../config/configuration.php';
+require_once MODEL_PATH . 'Reservation.php';
+require_once MODEL_PATH . 'Chambre.php';
+require_once MODEL_PATH . 'Hotel.php';
 
 /**
  * Contrôleur de réservation
@@ -42,11 +42,13 @@ class ReservationController
             $this->redirigerAvecErreur("Utilisateur non connecté");
             return;
         }
-        $idUtilisateur = $_SESSION['utilisateur']['id_utilisateur'];
+        $utilisateur = $_SESSION['utilisateur'];
+        $idUtilisateur = htmlspecialchars($utilisateur['id'] ?? '', ENT_QUOTES, 'UTF-8');
 
         // Définition des champs obligatoires attendus du formulaire
         // Remarque : les noms des champs ici doivent correspondre exactement à ceux envoyés par le formulaire.
-        $champsRequis = ['choixVille', 'id_hotel', 'id_chambre', 'date_arrivee', 'date_depart'];
+        $champsRequis = ['choixVille', 'id_hotel', 'id_chambre', 'date_arrivee', 'date_depart', 'id_utilisateur'];
+
         foreach ($champsRequis as $champ) {
             // Vérifie que le champ est défini et non vide (après suppression des espaces)
             if (!isset($_POST[$champ]) || empty(trim($_POST[$champ]))) {
@@ -55,10 +57,19 @@ class ReservationController
             }
         }
 
+        // (Vérification de sécurité en s'assurant qu'un utilisateur ne peut pas soumettre une réservation en utilisant l'ID d'un autre utilisateur.
+        // Vérification de la correspondance entre l'ID utilisateur du formulaire et celui de la session
+        $idUtilisateurFormulaire = htmlspecialchars($_POST['id_utilisateur'] ?? '', ENT_QUOTES, 'UTF-8');
+        if ($idUtilisateurFormulaire !== $idUtilisateur) {
+            $this->redirigerAvecErreur("Incohérence entre l'identifiant utilisateur du formulaire et celui de la session.");
+            return;
+        }
+
         // Traitement et validation des données reçues
 
-        // On suppose que 'choixVille' est envoyé en tant qu'entier (ID de la ville), sinon on pourrait le traiter différemment.
+        //? On suppose que 'choixVille' est envoyé en tant qu'entier (ID de la ville), sinon on pourrait le traiter différemment.
         $choixVille = filter_var($_POST['choixVille'], FILTER_VALIDATE_INT, ["options" => ["min_range" => 1]]);
+
         // Récupération et validation de l'ID de l'hôtel (champ 'id_hotel')
         $id_hotel = filter_var($_POST['id_hotel'], FILTER_VALIDATE_INT, ["options" => ["min_range" => 1]]);
         // Récupération et validation de l'ID de la chambre (champ 'id_chambre')
@@ -73,23 +84,34 @@ class ReservationController
             return;
         }
 
-        // Vérification du format des dates (AAAA-MM-JJ)
-        if (!$this->verifierFormatDate($dateArrivee) || !$this->verifierFormatDate($dateDepart)) {
-            $this->redirigerAvecErreur("Format de date invalide (format attendu : AAAA-MM-JJ)");
+
+        /*verifier date*/
+        // Utilisation de DateTime pour une validation plus précise des dates
+        $dateArriveeObj = DateTime::createFromFormat('Y-m-d', $dateArrivee);
+        $dateDepartObj = DateTime::createFromFormat('Y-m-d', $dateDepart);
+
+        // Vérification du format correct (createFromFormat retourne false si le format est incorrect)
+        if (!$dateArriveeObj || !$dateDepartObj) {
+            $this->redirigerAvecErreur("Format de date invalide (AAAA-MM-JJ attendu)");
             return;
         }
 
-        // Vérifier que la date d'arrivée n'est pas dans le passé
-        if (strtotime($dateArrivee) < strtotime(date('Y-m-d'))) {
+        // Vérifie que la date d'arrivée n'est pas dans le passé
+        $aujourdHui = new DateTime(); // Date du jour
+        $aujourdHui->setTime(0, 0); // On met l'heure à 00:00 pour éviter les soucis avec les heures actuelles
+
+        if ($dateArriveeObj < $aujourdHui) {
             $this->redirigerAvecErreur("La date d'arrivée ne peut pas être dans le passé.");
             return;
         }
 
-        // Vérifier la cohérence des dates : la date d'arrivée doit être strictement inférieure à la date de départ
-        if (strtotime($dateArrivee) >= strtotime($dateDepart)) {
-            $this->redirigerAvecErreur("Les dates d'arrivée et de départ sont incohérentes");
+        // Vérifie que la date d'arrivée est bien avant la date de départ
+        if ($dateArriveeObj >= $dateDepartObj) {
+            $this->redirigerAvecErreur("Les dates d'arrivée et de départ sont incohérentes.");
             return;
         }
+
+        //fin verif date
 
         // Vérifier que l'hôtel existe en base de données
         if (!$this->hotelModel->existeHotel($id_hotel)) {
@@ -113,7 +135,7 @@ class ReservationController
         try {
             $reservationReussie = $this->reservationModel->ajouterReservation(
                 $idUtilisateur,
-                $$id_chambre,
+                $id_chambre,
                 $dateArrivee,
                 $dateDepart,
                 $id_hotel
@@ -133,16 +155,6 @@ class ReservationController
         }
     }
 
-    /**
-     * Vérifie si une date respecte le format AAAA-MM-JJ.
-     *
-     * @param string $date
-     * @return bool
-     */
-    private function verifierFormatDate($date)
-    {
-        return preg_match('/^\d{4}-\d{2}-\d{2}$/', $date);
-    }
 
     /**
      * Redirige l'utilisateur en cas d'erreur en enregistrant un message d'erreur.
