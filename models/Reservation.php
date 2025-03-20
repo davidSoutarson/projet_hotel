@@ -53,4 +53,32 @@ class Reservation
 
         return $stmt->fetchColumn() == 0;  // Retourne vrai si la chambre est libre
     }
+
+    // fonction récupérant tout les réservation d'un utilisateur
+
+    // Fonction récupérant toutes les réservations d'un utilisateur avec les détails de l'hôtel et de la chambre
+    public function getReservationsByUser($idUtilisateur)
+    {
+        try {
+            $sql = "SELECT 
+                    r.*, 
+                    h.hotel_nom, 
+                    h.hotel_adresse, 
+                    c.numero AS chambre_numero
+                FROM " . $this->table . " r
+                JOIN chambres c ON r.id_chambre = c.id
+                JOIN hotels h ON c.id_hotel = h.id
+                WHERE r.id_utilisateur = :id_utilisateur
+                ORDER BY r.date_debut DESC";
+            $stmt = $this->connexion->prepare($sql);
+            $stmt->bindParam(':id_utilisateur', $idUtilisateur, PDO::PARAM_INT);
+            $stmt->execute();
+
+            // Récupère toutes les lignes sous forme de tableau associatif
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("Erreur lors de la récupération des réservations pour l'utilisateur : " . $e->getMessage());
+            return [];  // Retourne un tableau vide en cas d'erreur
+        }
+    }
 }

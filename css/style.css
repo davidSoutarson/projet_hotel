@@ -10,6 +10,11 @@
 body {
   width: 100%;
   font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #4facfe, #00f2fe);
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  color: #333;
 }
 
 #warape {
@@ -23,8 +28,24 @@ header {
   background-color: #1f85ec;
   display: block;
 }
+
+.conteneur-menus-info {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.conteneur-menus {
+  display: flex;
+}
+
+/*---- menu -----------------
+  nav_entreprise
+  nav_utilisateur
+----------------------------*/
 nav {
-  max-width: 70%;
+  max-width: 95%;
   min-width: 600px;
   margin: auto;
   border: 2px solid yellow;
@@ -32,7 +53,6 @@ nav {
 }
 
 .nav_entreprise {
-  /*  margin-right: 20%; */
   margin-bottom: 15px;
   margin-top: 15px;
   background-color: #69abee;
@@ -72,14 +92,30 @@ nav a:hover {
   background-color: blue;
 }
 
+/*fin ---- menu -----------------
+  nav_entreprise
+  nav_utilisateur
+----------------------------*/
+
+/* ---- Bloc info-connexion ---- */
+.info-connexion {
+  max-width: 95%;
+  min-width: 200px;
+  background-color: #ffffff;
+  border: 2px solid #4caf50;
+  border-radius: 12px;
+  padding: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+/* Fin ---- Bloc info-connexion ---- */
+
 main {
   width: 80%;
   margin: auto;
 }
-footer {
-  width: 100%;
-  background-color: #69abee;
-}
+
 h1 {
   color: white;
   margin-right: 15px;
@@ -96,19 +132,6 @@ h3 {
 
 .blanc {
   color: #ccc;
-}
-
-/* bouton de deconnextion entreprise et utilisateuer */
-.exit {
-  margin-top: 10px;
-  border: solid 2px rgb(229, 232, 193);
-  background: darkgreen;
-  border-radius: 30px;
-  color: rgb(252, 252, 252);
-  text-transform: uppercase;
-  text-decoration: none;
-  padding: 10px;
-  display: block;
 }
 
 form {
@@ -140,11 +163,34 @@ form {
   flex-wrap: wrap;
   justify-content: space-around;
   align-items: center;
-  background-color: rgba(255, 255, 0, 0.508);
+  background-color: rgba(255, 255, 0, 0.698);
   width: 80%;
   margin: 0 auto;
   padding: 10px;
   border: 2px solid rgb(219, 86, 24);
+}
+
+.info-progression {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: flex-start;
+  background-color: rgba(0, 255, 195, 0.698);
+  width: 70%;
+  margin: 0 auto;
+  padding: 20px;
+  /*  border: 3px solid rgb(24, 219, 34); */
+  border-radius: 5px;
+  margin-bottom: 1%;
+  margin-top: 1%;
+}
+
+.titre-progres {
+  margin-bottom: 1%;
+  /*  display: block;
+  text-align: center;
+  width: 100%; */
 }
 
 .fon-tansparent {
@@ -212,17 +258,69 @@ td {
   padding: 5px;
 }
 
-/* les bouton  */
-
+/* Styles généraux pour tous les boutons */
 .btn {
   display: inline-block;
-  border: 1px solid rgb(88, 90, 91);
-  background: #69abee;
+  border: 2px solid rgb(88, 90, 91);
   border-radius: 30px;
-  padding: 10px;
+  background: #69abee; /* Couleur par défaut */
+  color: #fff;
+  padding: 12px 24px;
   margin: 5px;
-  height: auto;
-  width: auto;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Effet de profondeur général */
+}
+
+/* Effet au survol */
+.btn:hover {
+  background: #4a90e2;
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Effet lors du clic */
+.btn:active {
+  background: #3a78c2;
+  transform: scale(0.98);
+}
+
+/* Variante : Bouton de réservation (confirmation) */
+.right {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn.reservation {
+  background: #4caf50;
+  border-color: yellow;
+}
+
+.btn.reservation:hover {
+  background: #45a049;
+}
+
+.btn.reservation:active {
+  background: #3d8b40;
+}
+
+/* Variante : Bouton de déconnexion (exit) */
+.btn.exit {
+  background: #064420;
+  border-color: rgb(229, 232, 193);
+}
+
+.btn.exit:hover {
+  background: #0b5e30;
+}
+
+.btn.exit:active {
+  background: #053d1f;
 }
 
 .ajouter {
@@ -232,12 +330,19 @@ td {
 }
 
 .container {
+  width: 70%;
+  margin: 0 auto;
   background-color: #ffffff;
   border: 2px solid #4caf50;
   border-radius: 12px;
   padding: 40px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   text-align: center;
-  max-width: 400px;
-  width: 100%;
+}
+
+footer {
+  background: #0078ff;
+  color: #fff;
+  text-align: center;
+  padding: 10px;
 }

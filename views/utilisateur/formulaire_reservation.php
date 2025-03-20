@@ -55,6 +55,7 @@ if (empty($etape)) :
             <h3>Pré-sélection - Choix de la ville</h3>
             <p>
                 <label for="choixVille">Choix de la ville :</label>
+
                 <select id="choixVille" name="choixVille" required>
                     <option value="">-- Sélectionnez une ville --</option>
                     <?php foreach ($villes as $ville) : ?>
@@ -114,6 +115,7 @@ elseif ($etape == 'ville') :
         <p><button class="btn" type="submit">Valider l'hôtel</button></p>
     </form>
 
+
 <?php
 // ===================================
 // ÉTAPE 3 : Formulaire complet de réservation
@@ -138,7 +140,18 @@ elseif ($etape == 'hotel') :
         echo "<p style='color:red;'>Aucune chambre disponible pour cet hôtel.</p>";
         exit;
     }
+
+    // Affichage des choix précédents
+    $nomVille = $hotelModel->obtenirNomVilleParId($choixVille);
+    $nomHotel = $hotelModel->obtenirNomHotelParId($id_hotel);
 ?>
+
+    <div class="info-progression">
+        <h2 class="titre-progres">Résumé de votre sélection</h2>
+        <p><strong>Ville choisie :</strong> <?= htmlspecialchars($nomVille, ENT_QUOTES, 'UTF-8') ?></p>
+        <p><strong>Hôtel choisi :</strong> <?= htmlspecialchars($nomHotel, ENT_QUOTES, 'UTF-8') ?></p>
+    </div>
+
     <form action="../../controllers/ReservationController.php" method="POST">
         <h2>Faire une Réservation</h2>
         <fieldset class="form-boxe">
@@ -166,18 +179,40 @@ elseif ($etape == 'hotel') :
                 </select>
             </p>
         </fieldset>
+
         <!-- Transmettre les informations utilisateur -->
-        <input type="hidden" name="nom" value="<?= $nomUtilisateur ?>">
-        <input type="hidden" name="prenom" value="<?= $prenomUtilisateur ?>">
-        <input type="hidden" name="email" value="<?= $emailUtilisateur ?>">
-        <input type="hidden" name="id_utilisateur" value="<?= $idUtilisateur ?>">
-        <!-- Conserver les sélections de ville et d'hôtel -->
-        <input type="hidden" name="choixVille" value="<?= htmlspecialchars($choixVille, ENT_QUOTES, 'UTF-8') ?>">
-        <input type="hidden" name="id_hotel" value="<?= htmlspecialchars($id_hotel, ENT_QUOTES, 'UTF-8') ?>">
-        <p><button class="btn" type="submit">Confirmer la réservation</button></p>
+        <fieldset class="form-boxe">
+            <h3>Vérifiez vos coordonnées</h3>
+            <p>
+                <label for="nom">vautre nom :</label>
+                <input type="text" id="nom" name="nom" value="<?= $nomUtilisateur ?>" readonly autocomplete="family-name">
+            </p>
+            <p>
+                <label for="prenom">vautre prenom :</label>
+                <input type="text" id="prenom" name="prenom" value="<?= $prenomUtilisateur ?>" readonly autocomplete="given-name">
+            </p>
+            <p>
+                <label for="email">vautre email :</label>
+                <input type="email" id="email" name="email" value="<?= $emailUtilisateur ?>" readonly autocomplete="email">
+            </p>
+
+            <!-- Conserver les sélections de ville et d'hôtel -->
+            <input type="hidden" name="id_utilisateur" value="<?= $idUtilisateur ?>">
+            <input type="hidden" name="choixVille" value="<?= htmlspecialchars($choixVille, ENT_QUOTES, 'UTF-8') ?>">
+            <input type="hidden" name="id_hotel" value="<?= htmlspecialchars($id_hotel, ENT_QUOTES, 'UTF-8') ?>">
+            <!-- modife  -->
+            <input type="hidden" name="nom_hotel" value="<?= htmlspecialchars($nomHotel, ENT_QUOTES, 'UTF-8') ?>">
+            <input type="hidden" name="nom_Ville" value="<?= htmlspecialchars($nomVille, ENT_QUOTES, 'UTF-8') ?>">
+            <input type="hidden" name="numero_chambre" value="<?= htmlspecialchars($chambre['numero'], ENT_QUOTES, 'UTF-8') ?>">
+        </fieldset>
+
+        <p class="right">
+            <button class="btn reservation" type="submit">Confirmer la réservation</button>
+        </p>
     </form>
 <?php
 endif;
 ?>
+
 
 <?php require_once VIEWS_PATH . 'footer.php'; ?>

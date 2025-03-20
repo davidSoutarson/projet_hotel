@@ -131,7 +131,7 @@ class ReservationController
             return;
         }
 
-        // Tentative d'ajout de la réservation dans la base
+        // partie modifier
         try {
             $reservationReussie = $this->reservationModel->ajouterReservation(
                 $idUtilisateur,
@@ -142,6 +142,16 @@ class ReservationController
             );
 
             if ($reservationReussie) {
+                // ➡️ Enregistrer les détails de la réservation dans la session
+                $_SESSION['reservation_details'] = [
+                    'ville' => $_POST['nom_Ville'], /* modife */
+                    'hotel' => $_POST['nom_hotel'],
+                    'chambre' => $_POST['numero_chambre'],
+                    'date_arrivee' => $dateArrivee,
+                    'date_depart' => $dateDepart
+                ];
+                session_write_close(); // Assurez-vous que les données sont bien enregistrées
+
                 $this->ajouterLog("Réservation réussie pour l'utilisateur ID: $idUtilisateur");
                 header("Location:" . VIEWS_LIEN . "/utilisateur/confirmation_reservation.php");
                 exit;
@@ -149,10 +159,11 @@ class ReservationController
                 $this->redirigerAvecErreur("Erreur inconnue. Contactez l'administrateur.");
             }
         } catch (Exception $e) {
-            // En cas d'exception, log l'erreur et redirige avec un message d'erreur
             $this->ajouterLog("Erreur lors de l'ajout : " . $e->getMessage());
             $this->redirigerAvecErreur("Erreur lors de l'ajout : " . $e->getMessage());
         }
+
+        //fin partie modifier
     }
 
 

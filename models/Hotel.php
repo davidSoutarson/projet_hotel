@@ -136,6 +136,30 @@ class Hotel
         return $stmt->fetchAll(PDO::FETCH_ASSOC); // Retourne les hôtels correspondant à la ville donnée
     }
 
+    //++
+    // Récupère le nom d'une ville par son ID
+    public function obtenirNomVilleParId($idVille)
+    {
+        $sql = "SELECT nom_ville FROM villes_francais WHERE id = :id_ville";
+        $stmt = $this->connexion->prepare($sql);
+        $stmt->bindParam(':id_ville', $idVille, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->fetchColumn(); // Retourne directement le nom de la ville
+    }
+
+    //++
+    // Récupère le nom d'un hôtel par son ID
+    public function obtenirNomHotelParId($idHotel)
+    {
+        $sql = "SELECT hotel_nom FROM " . $this->table . " WHERE id = :id_hotel";
+        $stmt = $this->connexion->prepare($sql);
+        $stmt->bindParam(':id_hotel', $idHotel, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->fetchColumn(); // Retourne directement le nom de l'hôtel
+    }
+
     public function existeHotel($hotelId)
     {
         $sql = "SELECT COUNT(*) FROM " . $this->table . " WHERE id = :id_hotel";
