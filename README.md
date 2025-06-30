@@ -1,6 +1,7 @@
 # 🏨 Projet Hôtel
 
 Une application web de réservation d’hôtels en PHP procédural structuré (MVC simplifié).
+Réaliser pendant ma formation: Integrateur Developpeur Web et Mobile chez esecad
 
 ## 🔧 Fonctionnalités
 - Connexion / inscription utilisateur & entreprise
