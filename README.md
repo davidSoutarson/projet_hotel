@@ -22,9 +22,9 @@ Réaliser pendant ma formation: Integrateur Developpeur Web et Mobile chez eseca
 - `/views/` : formulaires et affichages HTML
 - `/config/` : paramètres de connexion
 - `/uploads/` : images des hôtels et chambres
-
-## 🚀 À venir (suggestions)
 - Sécurisation avec prepared statements (PDO)
+## 🚀 À venir (suggestions)
+- Sécurisation avec prepared statements (PDO) a verifier modi en cour le 8/11/2026
 - Responsive design (mobile friendly)
 - Ajout d’une API REST pour la gestion des réservations
 - Intégration avec JavaScript dynamique (AJAX, fetch)
