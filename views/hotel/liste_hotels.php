@@ -24,6 +24,8 @@ $hotels = $hotelController->obtenirTousLesHotels();
                 <p><?= htmlspecialchars($hotel['telephone']) ?></p>
                 </br>
                 <p><?= htmlspecialchars($hotel['description_hotel']) ?></p>
+                <!-- Ajouter la nom ville de l'hôtel si disponible EX idier < htmlspecialchars($villes['nom_ville']) > -->
+                <p> on achiche nom la ville ici :</p>     
                 </br>
                 <p>Prix : <?= htmlspecialchars($prix_min) ?>€ à <?= htmlspecialchars($prix_max) ?>€</p>
 
@@ -31,6 +33,7 @@ $hotels = $hotelController->obtenirTousLesHotels();
                 <form class="fon-tansparent" action="/projet_hotel/controllers/ReservationController.php" method="POST">
                     <input type="hidden" name="action" value="selection_hotel">
                     <input type="hidden" name="id_hotel" value="<?= htmlspecialchars($hotel['id']) ?>">
+                <!-- input ex ide envoie le nom de la ville ce qui corije: http://localhost/projet_hotel/views/utilisateur/erreur_reservation.php  : Champ manquant : choixVille  -->
                     <button class="btn" type="submit">Sélectionner cet hôtel</button>
                 </form>
             </div>

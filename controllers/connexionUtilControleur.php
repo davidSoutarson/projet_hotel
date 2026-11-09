@@ -42,7 +42,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // Vérifie si l'entreprise existe et si le mot de passe correspond (en comparant le hash)
             if ($utilisateur && password_verify($motDePasse, $utilisateur['mot_de_passe'])) {
-                // Création de la session entreprise via le contrôleur de session dédié
+                // [IA-Hermès] Anti "session fixation" : on régénère l'identifiant de session
+                // à la connexion, pour invalider l'ID que le navigateur possédait avant.
+                if (session_status() !== PHP_SESSION_ACTIVE) { session_start(); }
+                session_regenerate_id(true);
+                // Création de la session utilisateur via le contrôleur de session dédié
                 SessionUtilController::creerSessionUtilisateur(
                     $utilisateur['id'],
                     $utilisateur['nom'],

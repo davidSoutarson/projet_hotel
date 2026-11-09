@@ -42,6 +42,11 @@ class UtilisateurController
 
         // Vérification des champs obligatoires
         if (!empty($inscription_util_nom) && !empty($inscription_util_prenom) && !empty($inscription_util_adresse) && !empty($inscription_util_email) && !empty($inscription_util_mot_de_passe)) {
+            // [IA-Hermès] Validation du FORMAT de l'email (et pas seulement qu'il n'est pas vide).
+            if (!filter_var($inscription_util_email, FILTER_VALIDATE_EMAIL)) {
+                echo "L'adresse email saisie est invalide.";
+                return;
+            }
             $motDePasseHashe = password_hash($inscription_util_mot_de_passe, PASSWORD_BCRYPT);
 
             // Ajout de l'utilisateur à la base de données

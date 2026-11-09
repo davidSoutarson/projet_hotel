@@ -34,6 +34,11 @@ class EntrepriseController
         // Vérification des champs obligatoires
         # Transformation du mot de passe en hash : $motDePasseHashe
         if (!empty($inscription_entr_nom) && !empty($inscription_entr_adresse) && !empty($inscription_entr_email) && !empty($inscription_entr_mot_de_passe)) {
+            // [IA-Hermès] Validation du FORMAT de l'email (et pas seulement qu'il n'est pas vide).
+            if (!filter_var($inscription_entr_email, FILTER_VALIDATE_EMAIL)) {
+                echo "L'adresse email saisie est invalide.";
+                return;
+            }
             $motDePasseHashe = password_hash($inscription_entr_mot_de_passe, PASSWORD_BCRYPT);
 
             // Ajout de l'entreprise à la base de données

@@ -16,6 +16,7 @@ require_once __DIR__ . '/../config/configuration.php';
     <div id=wrape>
         <header>
             <h1>Bienvenue sur notre site de réservation d'hôtels</h1>
+            <!-- Menu de navigation  test commentaires 2026-->
             <div class="conteneur-menus-info">
 
                 <div class="conteneur-menus-">

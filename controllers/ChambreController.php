@@ -81,11 +81,6 @@ class ChambreController
 
 // Traitement du formulaire
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Pour faciliter le débogage (à retirer en production)
-    echo "<pre>";
-    print_r($_POST);
-    echo "</pre>";
-
     if (isset($_POST['action']) && $_POST['action'] === 'ajouter_chambre') {
         $chambreController = new ChambreController();
 

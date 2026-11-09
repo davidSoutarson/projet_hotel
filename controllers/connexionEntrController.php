@@ -3,7 +3,6 @@
 require_once '../config/configuration.php';
 require_once 'SessionEntrController.php';
 
-
 /**
  * Nettoie une chaîne de caractères en supprimant les balises HTML et en échappant les caractères spéciaux.
  *
@@ -43,6 +42,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // Vérifie si l'entreprise existe et si le mot de passe correspond (en comparant le hash)
             if ($entreprise && password_verify($motDePasse, $entreprise['mot_de_passe'])) {
+                // [IA-Hermès] Anti "session fixation" : on régénère l'identifiant de session
+                // à la connexion, pour invalider l'ID que le navigateur possédait avant.
+                if (session_status() !== PHP_SESSION_ACTIVE) { session_start(); }
+                session_regenerate_id(true);
                 // Création de la session entreprise via le contrôleur de session dédié
                 SessionEntrController::creerSessionEntreprise(
                     $entreprise['id'],

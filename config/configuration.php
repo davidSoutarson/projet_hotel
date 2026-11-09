@@ -1,5 +1,9 @@
 <?php
 $config = require __DIR__ . '/config.php';
+
+// [IA-Hermès] Charge la classe de protection CSRF (jeton de session) — dispo partout.
+require_once __DIR__ . '/Csrf.php';
+
 class Database
 {
     private $hote = "localhost";
